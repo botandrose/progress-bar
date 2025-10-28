@@ -9,9 +9,14 @@
       "import": "./index.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/botandrose/progress-bar.git"
+  },
   "files": [
     "index.js",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
