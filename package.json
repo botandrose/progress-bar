@@ -13,6 +13,9 @@
     "type": "git",
     "url": "https://github.com/botandrose/progress-bar.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "index.js",
     "README.md",
