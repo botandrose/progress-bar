@@ -51,5 +51,6 @@ progress-bar {
   --bar-height: 32px;
   --bar-radius: 4px;
   --bar-padding: 8px;
+  --bar-border-color: #999;
 }
 ```

@@ -47,11 +47,12 @@ class ProgressBar extends HTMLElement {
           --bar-height: 32px;
           --bar-radius: 4px;
           --bar-padding: 8px;
+          --bar-border-color: #999;
 
           display: block;
           position: relative;
           padding: var(--bar-padding);
-          border: 1px solid #999;
+          border: 1px solid var(--bar-border-color);
           border-radius: var(--bar-radius);
         }
 
