@@ -1,3 +1,48 @@
+const STYLES = `
+  :host {
+    --progress-color: rgb(57, 137, 39);
+    --progress-duration: 120ms;
+    --bar-height: 32px;
+    --bar-radius: 4px;
+    --bar-padding: 8px;
+    --bar-border-color: #999;
+
+    display: block;
+    position: relative;
+    padding: var(--bar-padding);
+    border: 1px solid var(--bar-border-color);
+    border-radius: var(--bar-radius);
+  }
+
+  .bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--progress-color);
+    width: 0%;
+    transition: width var(--progress-duration) ease, opacity 60ms ease;
+    border-radius: var(--bar-radius);
+  }
+
+  .content {
+    position: relative;
+    display: block;
+    color: white;
+    font-size: 13px;
+    z-index: 1;
+  }
+`;
+
+let styleSheet = null;
+function getStyleSheet() {
+  if (!styleSheet) {
+    styleSheet = new CSSStyleSheet();
+    styleSheet.replaceSync(STYLES);
+  }
+  return styleSheet;
+}
+
 class ProgressBar extends HTMLElement {
   constructor() {
     super();
@@ -39,43 +84,8 @@ class ProgressBar extends HTMLElement {
   }
 
   render() {
+    this.shadowRoot.adoptedStyleSheets = [getStyleSheet()];
     this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          --progress-color: rgb(57, 137, 39);
-          --progress-duration: 120ms;
-          --bar-height: 32px;
-          --bar-radius: 4px;
-          --bar-padding: 8px;
-          --bar-border-color: #999;
-
-          display: block;
-          position: relative;
-          padding: var(--bar-padding);
-          border: 1px solid var(--bar-border-color);
-          border-radius: var(--bar-radius);
-        }
-
-        .bar {
-          position: absolute;
-          top: 0;
-          left: 0;
-          height: 100%;
-          background: var(--progress-color);
-          width: 0%;
-          transition: width var(--progress-duration) ease, opacity 60ms ease;
-          border-radius: var(--bar-radius);
-        }
-
-        .content {
-          position: relative;
-          display: block;
-          color: white;
-          font-size: 13px;
-          z-index: 1;
-        }
-      </style>
-
       <div class="bar"></div>
       <span class="content">
         <slot></slot>
