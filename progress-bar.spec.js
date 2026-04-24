@@ -43,6 +43,14 @@ describe('progress-bar', () => {
     expect(content).toBeTruthy();
   });
 
+  it('nests bar inside content so slotted text has a background ancestor for contrast detection', () => {
+    const content = element.shadowRoot.querySelector('.content');
+    const bar = element.shadowRoot.querySelector('.bar');
+    const slot = element.shadowRoot.querySelector('slot');
+    expect(content.contains(bar)).toBe(true);
+    expect(content.contains(slot)).toBe(true);
+  });
+
   it('renders slotted content', () => {
     const slot = element.shadowRoot.querySelector('slot');
     expect(slot).toBeTruthy();

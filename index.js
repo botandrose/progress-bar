@@ -9,11 +9,20 @@ const STYLES = `
     --bar-border-color: #999;
 
     display: block;
-    position: relative;
-    padding: var(--bar-padding);
     background: var(--progress-track-color);
     border: 1px solid var(--bar-border-color);
     border-radius: var(--bar-radius);
+  }
+
+  .content {
+    position: relative;
+    display: block;
+    padding: var(--bar-padding);
+    background: var(--progress-track-color);
+    border-radius: var(--bar-radius);
+    color: white;
+    font-size: 13px;
+    z-index: 0;
   }
 
   .bar {
@@ -21,18 +30,11 @@ const STYLES = `
     top: 0;
     left: 0;
     height: 100%;
-    background: var(--progress-color);
     width: 0%;
+    background: var(--progress-color);
     transition: width var(--progress-duration) ease, opacity 60ms ease;
     border-radius: var(--bar-radius);
-  }
-
-  .content {
-    position: relative;
-    display: block;
-    color: white;
-    font-size: 13px;
-    z-index: 1;
+    z-index: -1;
   }
 `;
 
@@ -88,8 +90,8 @@ class ProgressBar extends HTMLElement {
   render() {
     this.shadowRoot.adoptedStyleSheets = [getStyleSheet()];
     this.shadowRoot.innerHTML = `
-      <div class="bar"></div>
       <span class="content">
+        <div class="bar"></div>
         <slot></slot>
       </span>
     `;
