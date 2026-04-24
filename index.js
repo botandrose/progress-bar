@@ -1,7 +1,7 @@
 const STYLES = `
   :host {
-    --progress-color: rgb(57, 137, 39);
-    --progress-track-color: #2E7D32;
+    --progress-color: #2E7D32;
+    --progress-track-color: #0D3D10;
     --progress-duration: 120ms;
     --bar-height: 32px;
     --bar-radius: 4px;
