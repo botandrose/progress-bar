@@ -1,13 +1,13 @@
 const STYLES = `
   :host {
     --progress-color: #2E7D32;
-    --progress-track-color: #0D3D10;
+    --error-color: #7a242f;
+    --progress-track-color: #333333;
     --progress-duration: 120ms;
     --bar-height: 32px;
     --bar-radius: 4px;
     --bar-padding: 8px;
     --bar-border-color: #999;
-
     display: block;
     background: var(--progress-track-color);
     border: 1px solid var(--bar-border-color);
@@ -18,8 +18,6 @@ const STYLES = `
     position: relative;
     display: block;
     padding: var(--bar-padding);
-    background: var(--progress-track-color);
-    border-radius: var(--bar-radius);
     color: white;
     font-size: 13px;
     z-index: 0;
