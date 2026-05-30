@@ -36,6 +36,14 @@ bar.percent = 75;
 
 - `percent` (number) - The progress percentage. Values are clamped to 0-100; a non-numeric value throws. Default: 0. Can be set as attribute or property.
 - `error` (boolean) - Whether the bar is in an error state, which recolors the fill to `--error-color`. Reflected between the `error` property and the `error` attribute, so `<progress-bar error>` and `el.error = true` are equivalent. Default: false.
+- `indeterminate` (boolean) - Whether the progress is unknown. While indeterminate the fill animates as a sweeping segment (or, in circular mode, a spinning arc) and `aria-valuenow` is dropped, which is the standard signal for an indeterminate progressbar. Setting a determinate `percent` does not clear it — toggle `indeterminate` off explicitly. Reflected between property and attribute. Default: false.
+- `mode` (string) - `"linear"` (default) renders the horizontal fill bar; `"circular"` renders an SVG ring whose arc tracks `percent`, with the slotted content centered. Both modes honor `error` and `indeterminate`.
+
+```html
+<progress-bar indeterminate>working…</progress-bar>
+<progress-bar mode="circular" percent="42">42%</progress-bar>
+<progress-bar mode="circular" indeterminate></progress-bar>
+```
 
 ### Slots
 
@@ -59,9 +67,13 @@ Custom properties are reserved for the sealed shadow internals that CSS can't ot
 progress-bar {
   --progress-color: rgb(57, 137, 39); /* fill color */
   --error-color: #7a242f;             /* fill color when the element has the [error] attribute */
-  --progress-duration: 120ms;         /* fill width transition */
-  --bar-height: 32px;                 /* minimum bar height */
-  --bar-padding: 8px;                 /* padding around the label */
+  --progress-duration: 120ms;         /* fill / dashoffset transition */
+  --bar-height: 32px;                 /* minimum bar height (linear) */
+  --bar-padding: 8px;                 /* padding around the label (linear) */
+  --track-color: #333333;             /* unfilled ring color (circular) */
+  --indeterminate-duration: 1.5s;     /* sweep / spin animation period */
+  --circular-size: 64px;              /* ring diameter (circular) */
+  --circular-thickness: 8;            /* ring stroke width (circular) */
 }
 ```
 

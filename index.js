@@ -1,10 +1,17 @@
+const CIRCLE_RADIUS = 45;
+const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
+
 const STYLES = `
   :host {
     --progress-color: #2E7D32;
     --error-color: #7a242f;
+    --track-color: #333333;
     --progress-duration: 120ms;
+    --indeterminate-duration: 1.5s;
     --bar-height: 32px;
     --bar-padding: 8px;
+    --circular-size: 64px;
+    --circular-thickness: 8;
     display: block;
     overflow: hidden;
     background: #333333;
@@ -32,6 +39,99 @@ const STYLES = `
   :host([error]) .bar {
     background: var(--error-color);
   }
+
+  /* Indeterminate (linear): a fixed-width segment sweeping across the track. */
+  :host([indeterminate]) .bar {
+    width: 40%;
+    animation: indeterminate-linear var(--indeterminate-duration) infinite linear;
+  }
+
+  @keyframes indeterminate-linear {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
+  }
+
+  /* Circular mode: the host box styling is for the linear track, so drop it. */
+  :host([mode="circular"]) {
+    background: transparent;
+    border: none;
+    overflow: visible;
+  }
+
+  .circular {
+    position: relative;
+    display: inline-flex;
+    width: var(--circular-size);
+    height: var(--circular-size);
+  }
+
+  .ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ring circle {
+    fill: none;
+    stroke-width: var(--circular-thickness);
+  }
+
+  .track {
+    stroke: var(--track-color);
+  }
+
+  .progress-ring {
+    stroke: var(--progress-color);
+    stroke-linecap: round;
+    stroke-dasharray: ${CIRCUMFERENCE};
+    stroke-dashoffset: ${CIRCUMFERENCE};
+    transition: stroke-dashoffset var(--progress-duration) ease;
+  }
+
+  :host([error]) .progress-ring {
+    stroke: var(--error-color);
+  }
+
+  .label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 13px;
+  }
+
+  /* Indeterminate (circular): spin a fixed arc around the ring. */
+  :host([indeterminate]) .ring {
+    animation: indeterminate-rotate var(--indeterminate-duration) infinite linear;
+  }
+
+  :host([indeterminate]) .progress-ring {
+    stroke-dashoffset: ${CIRCUMFERENCE * 0.75};
+  }
+
+  @keyframes indeterminate-rotate {
+    0%   { transform: rotate(-90deg); }
+    100% { transform: rotate(270deg); }
+  }
+`;
+
+const LINEAR_HTML = `
+  <span class="content">
+    <div class="bar"></div>
+    <slot></slot>
+  </span>
+`;
+
+const CIRCULAR_HTML = `
+  <div class="circular">
+    <svg class="ring" viewBox="0 0 100 100">
+      <circle class="track" cx="50" cy="50" r="${CIRCLE_RADIUS}"></circle>
+      <circle class="progress-ring" cx="50" cy="50" r="${CIRCLE_RADIUS}"></circle>
+    </svg>
+    <span class="label"><slot></slot></span>
+  </div>
 `;
 
 let styleSheet = null;
@@ -56,14 +156,14 @@ class ProgressBar extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this._percent = 0;
-    this._rendered = false;
+    this._renderedMode = null;
   }
 
   connectedCallback() {
-    if (!this._rendered) {
-      this.render();
-      this._rendered = true;
-    }
+    this.render();
+    this.setAttribute('role', 'progressbar');
+    this.setAttribute('aria-valuemin', '0');
+    this.setAttribute('aria-valuemax', '100');
     this.updateBar();
   }
 
@@ -83,27 +183,67 @@ class ProgressBar extends HTMLElement {
     this.toggleAttribute('error', Boolean(value));
   }
 
+  get indeterminate() {
+    return this.hasAttribute('indeterminate');
+  }
+
+  set indeterminate(value) {
+    this.toggleAttribute('indeterminate', Boolean(value));
+  }
+
+  get mode() {
+    return this.getAttribute('mode') === 'circular' ? 'circular' : 'linear';
+  }
+
+  set mode(value) {
+    this.setAttribute('mode', value);
+  }
+
   static get observedAttributes() {
-    return ['percent'];
+    return ['percent', 'mode', 'indeterminate'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'percent') {
       this._percent = clampPercent(newValue);
-      this.updateBar();
     }
+    if (name === 'mode') {
+      this.render();
+    }
+    this.updateBar();
   }
 
   updateBar() {
-    const bar = this.shadowRoot?.querySelector('.bar');
-    if (bar) {
-      bar.style.width = `${this._percent}%`;
+    if (this.mode === 'circular') {
+      const ring = this.shadowRoot?.querySelector('.progress-ring');
+      if (ring) {
+        ring.style.strokeDashoffset = this.indeterminate
+          ? ''
+          : String(CIRCUMFERENCE * (1 - this._percent / 100));
+      }
+    } else {
+      const bar = this.shadowRoot?.querySelector('.bar');
+      if (bar) {
+        // Leave width to the indeterminate CSS animation when unknown.
+        bar.style.width = this.indeterminate ? '' : `${this._percent}%`;
+      }
     }
-    this.setAttribute('aria-valuenow', String(this._percent));
+
+    if (this.indeterminate) {
+      this.removeAttribute('aria-valuenow');
+    } else {
+      this.setAttribute('aria-valuenow', String(this._percent));
+    }
   }
 
   render() {
+    const mode = this.mode;
+    if (this._renderedMode === mode) {
+      return;
+    }
+    this._renderedMode = mode;
     this.shadowRoot.adoptedStyleSheets = [getStyleSheet()];
+
     this.shadowRoot.innerHTML = `
       <div class="bar"></div>
       <div class="text"><slot></slot></div>
@@ -111,6 +251,7 @@ class ProgressBar extends HTMLElement {
     this.setAttribute('role', 'progressbar');
     this.setAttribute('aria-valuemin', '0');
     this.setAttribute('aria-valuemax', '100');
+    this.shadowRoot.innerHTML = mode === 'circular' ? CIRCULAR_HTML : LINEAR_HTML;
   }
 }
 
