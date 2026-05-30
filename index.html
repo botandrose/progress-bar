@@ -114,8 +114,18 @@
         </tr>
         <tr>
           <td><code>border: 3px dashed #c2185b</code></td>
-          <td class="desc">Inline style overrides the component's own <code>1px solid</code> host border.</td>
+          <td class="desc">Overrides the component's default <code>1px solid #999</code> host border (no CSS variable needed).</td>
           <td class="preview"><progress-bar percent="60" style="border:3px dashed #c2185b"><a class="download-link" href="#" download="x.xml">border.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>background: #9e9e9e</code></td>
+          <td class="desc">Sets the unfilled track color — it's just the host background; the fill (<code>.bar</code>) sits on top.</td>
+          <td class="preview"><progress-bar percent="60" style="background:#9e9e9e"><a class="download-link" href="#" download="x.xml">background.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>border-radius: 16px</code></td>
+          <td class="desc">Rounds the host; the fill is clipped to match because the host sets <code>overflow: hidden</code>.</td>
+          <td class="preview"><progress-bar percent="60" style="border-radius:16px"><a class="download-link" href="#" download="x.xml">radius.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>box-shadow: 0 2px 8px rgba(0,0,0,.5)</code></td>
@@ -143,8 +153,10 @@
 
   <section>
     <h2>CSS variables &amp; their effects</h2>
-    <p class="desc" style="font-size:13px">Custom properties on the host. Each row overrides one
-      variable to a dramatic value so the effect is visible; defaults are shown in the second column.</p>
+    <p class="desc" style="font-size:13px">Custom properties on the host. These exist only for things
+      a plain CSS directive can't reach — the sealed shadow internals (the fill and the inner label).
+      Host-level styling (background, border, radius) is done with standard CSS, shown in the table above.
+      Each row overrides one variable to a dramatic value so the effect is visible.</p>
     <table class="demo">
       <thead>
         <tr><th>Variable</th><th class="desc">Default &amp; effect</th><th class="preview">Override</th></tr>
@@ -156,24 +168,9 @@
           <td class="preview"><progress-bar percent="60" style="--progress-color:#1565c0"><a class="download-link" href="#" download="x.xml">#1565c0</a></progress-bar></td>
         </tr>
         <tr>
-          <td><code>--progress-track-color</code></td>
-          <td class="desc"><code>#333333</code> — the unfilled track / host background.</td>
-          <td class="preview"><progress-bar percent="60" style="--progress-track-color:#9e9e9e"><a class="download-link" href="#" download="x.xml">#9e9e9e</a></progress-bar></td>
-        </tr>
-        <tr>
           <td><code>--error-color</code></td>
-          <td class="desc"><code>#7a242f</code> — fill color when the host has class <code>error</code> (otherwise unused).</td>
+          <td class="desc"><code>#7a242f</code> — the fill color when the host has class <code>error</code>.</td>
           <td class="preview"><progress-bar percent="60" class="error" style="--error-color:#ff7043"><a class="download-link" href="#" download="x.xml">#ff7043 (.error)</a></progress-bar></td>
-        </tr>
-        <tr>
-          <td><code>--bar-border-color</code></td>
-          <td class="desc"><code>#999</code> — the host's <code>1px solid</code> border color.</td>
-          <td class="preview"><progress-bar percent="60" style="--bar-border-color:#e91e63"><a class="download-link" href="#" download="x.xml">#e91e63</a></progress-bar></td>
-        </tr>
-        <tr>
-          <td><code>--bar-radius</code></td>
-          <td class="desc"><code>4px</code> — corner radius of the host and the fill.</td>
-          <td class="preview"><progress-bar percent="60" style="--bar-radius:16px"><a class="download-link" href="#" download="x.xml">16px</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>--bar-padding</code></td>

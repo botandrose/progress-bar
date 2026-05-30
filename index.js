@@ -2,16 +2,14 @@ const STYLES = `
   :host {
     --progress-color: #2E7D32;
     --error-color: #7a242f;
-    --progress-track-color: #333333;
     --progress-duration: 120ms;
     --bar-height: 32px;
-    --bar-radius: 4px;
     --bar-padding: 8px;
-    --bar-border-color: #999;
     display: block;
-    background: var(--progress-track-color);
-    border: 1px solid var(--bar-border-color);
-    border-radius: var(--bar-radius);
+    overflow: hidden;
+    background: #333333;
+    border: 1px solid #999;
+    border-radius: 4px;
   }
 
   .content {
@@ -33,8 +31,7 @@ const STYLES = `
     height: 100%;
     width: 0%;
     background: var(--progress-color);
-    transition: width var(--progress-duration) ease, opacity 60ms ease;
-    border-radius: var(--bar-radius);
+    transition: width var(--progress-duration) ease;
     z-index: -1;
   }
 
@@ -52,15 +49,27 @@ function getStyleSheet() {
   return styleSheet;
 }
 
+function clampPercent(value) {
+  const number = Number(value);
+  if (Number.isNaN(number)) {
+    throw new TypeError(`progress-bar: percent must be numeric, got ${JSON.stringify(value)}`);
+  }
+  return Math.min(100, Math.max(0, number));
+}
+
 class ProgressBar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
     this._percent = 0;
+    this._rendered = false;
   }
 
   connectedCallback() {
-    this.render();
+    if (!this._rendered) {
+      this.render();
+      this._rendered = true;
+    }
     this.updateBar();
   }
 
@@ -69,9 +78,7 @@ class ProgressBar extends HTMLElement {
   }
 
   set percent(value) {
-    this._percent = Number(value) || 0;
-    this.setAttribute('percent', this._percent);
-    this.updateBar();
+    this.setAttribute('percent', clampPercent(value));
   }
 
   static get observedAttributes() {
@@ -80,7 +87,7 @@ class ProgressBar extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'percent') {
-      this._percent = Number(newValue) || 0;
+      this._percent = clampPercent(newValue);
       this.updateBar();
     }
   }
@@ -90,6 +97,7 @@ class ProgressBar extends HTMLElement {
     if (bar) {
       bar.style.width = `${this._percent}%`;
     }
+    this.setAttribute('aria-valuenow', String(this._percent));
   }
 
   render() {
@@ -100,6 +108,9 @@ class ProgressBar extends HTMLElement {
         <slot></slot>
       </span>
     `;
+    this.setAttribute('role', 'progressbar');
+    this.setAttribute('aria-valuemin', '0');
+    this.setAttribute('aria-valuemax', '100');
   }
 }
 

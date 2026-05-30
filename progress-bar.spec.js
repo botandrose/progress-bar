@@ -63,4 +63,30 @@ describe('progress-bar', () => {
     expect(bar.style.width).toBe('0%');
     document.body.removeChild(newElement);
   });
+
+  it('exposes progressbar ARIA semantics', () => {
+    expect(element.getAttribute('role')).toBe('progressbar');
+    expect(element.getAttribute('aria-valuemin')).toBe('0');
+    expect(element.getAttribute('aria-valuemax')).toBe('100');
+    expect(element.getAttribute('aria-valuenow')).toBe('33');
+  });
+
+  it('updates aria-valuenow alongside the bar width', () => {
+    element.percent = 80;
+    expect(element.getAttribute('aria-valuenow')).toBe('80');
+  });
+
+  it('clamps percent to the 0-100 range', () => {
+    element.percent = 150;
+    expect(element.percent).toBe(100);
+    expect(element.shadowRoot.querySelector('.bar').style.width).toBe('100%');
+
+    element.percent = -20;
+    expect(element.percent).toBe(0);
+    expect(element.shadowRoot.querySelector('.bar').style.width).toBe('0%');
+  });
+
+  it('throws on non-numeric percent rather than silently defaulting to 0', () => {
+    expect(() => { element.percent = 'abc'; }).toThrow(TypeError);
+  });
 });
