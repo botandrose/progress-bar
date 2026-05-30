@@ -38,6 +38,24 @@
     progress-bar.complete { opacity: 1.0; }
     .bg-dark  { background: #222; color: #eee; padding: 1rem; border-radius: 4px; }
     .bg-light { background: #fff; padding: 1rem; border-radius: 4px; }
+
+    table.demo {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    table.demo th,
+    table.demo td {
+      text-align: left;
+      vertical-align: top;
+      padding: 8px 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    table.demo th { color: #555; font-weight: 600; }
+    table.demo code { font-size: 12px; background: #eee; padding: 1px 4px; border-radius: 3px; }
+    table.demo .preview { width: 45%; }
+    table.demo .preview progress-bar { display: block; }
+    table.demo .desc { color: #555; }
   </style>
 </head>
 <body>
@@ -66,6 +84,114 @@
     <h2 style="color:#ccc">On a dark page background</h2>
     <div class="row"><progress-bar percent="50"><a class="download-link" href="#" download="dark.xml">dark.xml</a></progress-bar></div>
     <div class="row" style="margin-top:6px"><progress-bar percent="100" class="complete"><a class="download-link" href="#" download="dark-complete.xml">dark-complete.xml (opacity 0.8)</a></progress-bar></div>
+    <div class="row" style="margin-top:6px"><progress-bar percent="33" class="error"><a class="download-link" href="#" download="dark-error.xml">dark-error.xml (error state)</a></progress-bar></div>
+  </section>
+
+  <section>
+    <h2>External CSS set on the &lt;progress-bar&gt; element</h2>
+    <p class="desc" style="font-size:13px">Properties applied to the host from the outside.
+      The shadow DOM is sealed, so these affect the element's box and inherited
+      properties, but not its internal track/fill structure.</p>
+    <table class="demo">
+      <thead>
+        <tr><th>Directive</th><th class="desc">Behavior</th><th class="preview">Result</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>padding: 16px</code></td>
+          <td class="desc">Host padding sits between the border and the content, filled with the track color (the fill stays inside <code>.content</code>).</td>
+          <td class="preview"><progress-bar percent="60" style="padding:16px"><a class="download-link" href="#" download="x.xml">padding.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>margin: 0 0 0 40px</code></td>
+          <td class="desc">Normal outer margin; offsets the whole element.</td>
+          <td class="preview"><progress-bar percent="60" style="margin:0 0 0 40px"><a class="download-link" href="#" download="x.xml">margin.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>width: 200px</code></td>
+          <td class="desc">Constrains the element width; fill percent is relative to it.</td>
+          <td class="preview"><progress-bar percent="60" style="width:200px"><a class="download-link" href="#" download="x.xml">width.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>border: 3px dashed #c2185b</code></td>
+          <td class="desc">Inline style overrides the component's own <code>1px solid</code> host border.</td>
+          <td class="preview"><progress-bar percent="60" style="border:3px dashed #c2185b"><a class="download-link" href="#" download="x.xml">border.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>box-shadow: 0 2px 8px rgba(0,0,0,.5)</code></td>
+          <td class="desc">Applies to the host box; the component never sets its own shadow.</td>
+          <td class="preview"><progress-bar percent="60" style="box-shadow:0 2px 8px rgba(0,0,0,.5)"><a class="download-link" href="#" download="x.xml">shadow.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>opacity: 0.4</code></td>
+          <td class="desc">Fades the entire element, identical to the consumer <code>.pending</code> class.</td>
+          <td class="preview"><progress-bar percent="60" style="opacity:0.4"><a class="download-link" href="#" download="x.xml">opacity.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>transform: scale(1.1) rotate(-2deg)</code></td>
+          <td class="desc">Transforms the host box as a unit, fill and text included.</td>
+          <td class="preview"><progress-bar percent="60" style="transform:scale(1.1) rotate(-2deg)"><a class="download-link" href="#" download="x.xml">transform.xml</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>font-size: 20px</code></td>
+          <td class="desc">No effect on the label: <code>.content</code> sets its own <code>font-size: 13px</code> inside the shadow root, which wins for slotted text.</td>
+          <td class="preview"><progress-bar percent="60" style="font-size:20px"><a class="download-link" href="#" download="x.xml">font-size.xml</a></progress-bar></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>CSS variables &amp; their effects</h2>
+    <p class="desc" style="font-size:13px">Custom properties on the host. Each row overrides one
+      variable to a dramatic value so the effect is visible; defaults are shown in the second column.</p>
+    <table class="demo">
+      <thead>
+        <tr><th>Variable</th><th class="desc">Default &amp; effect</th><th class="preview">Override</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>--progress-color</code></td>
+          <td class="desc"><code>#2E7D32</code> — the fill color.</td>
+          <td class="preview"><progress-bar percent="60" style="--progress-color:#1565c0"><a class="download-link" href="#" download="x.xml">#1565c0</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>--progress-track-color</code></td>
+          <td class="desc"><code>#333333</code> — the unfilled track / host background.</td>
+          <td class="preview"><progress-bar percent="60" style="--progress-track-color:#9e9e9e"><a class="download-link" href="#" download="x.xml">#9e9e9e</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>--error-color</code></td>
+          <td class="desc"><code>#7a242f</code> — fill color when the host has class <code>error</code> (otherwise unused).</td>
+          <td class="preview"><progress-bar percent="60" class="error" style="--error-color:#ff7043"><a class="download-link" href="#" download="x.xml">#ff7043 (.error)</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>--bar-border-color</code></td>
+          <td class="desc"><code>#999</code> — the host's <code>1px solid</code> border color.</td>
+          <td class="preview"><progress-bar percent="60" style="--bar-border-color:#e91e63"><a class="download-link" href="#" download="x.xml">#e91e63</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>--bar-radius</code></td>
+          <td class="desc"><code>4px</code> — corner radius of the host and the fill.</td>
+          <td class="preview"><progress-bar percent="60" style="--bar-radius:16px"><a class="download-link" href="#" download="x.xml">16px</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>--bar-padding</code></td>
+          <td class="desc"><code>8px</code> — padding around the label inside the fill area.</td>
+          <td class="preview"><progress-bar percent="60" style="--bar-padding:18px"><a class="download-link" href="#" download="x.xml">18px</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>--bar-height</code></td>
+          <td class="desc"><code>32px</code> — minimum height of the bar; label is vertically centered.</td>
+          <td class="preview"><progress-bar percent="60" style="--bar-height:64px"><a class="download-link" href="#" download="x.xml">64px</a></progress-bar></td>
+        </tr>
+        <tr>
+          <td><code>--progress-duration</code></td>
+          <td class="desc"><code>120ms</code> — width transition time (drive the slider below to feel it).</td>
+          <td class="preview"><progress-bar percent="60" style="--progress-duration:1500ms"><a class="download-link" href="#" download="x.xml">1500ms</a></progress-bar></td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
   <section>

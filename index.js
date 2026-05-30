@@ -16,7 +16,10 @@ const STYLES = `
 
   .content {
     position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
+    min-height: var(--bar-height);
+    box-sizing: border-box;
     padding: var(--bar-padding);
     color: white;
     font-size: 13px;
@@ -33,6 +36,10 @@ const STYLES = `
     transition: width var(--progress-duration) ease, opacity 60ms ease;
     border-radius: var(--bar-radius);
     z-index: -1;
+  }
+
+  :host(.error) .bar {
+    background: var(--error-color);
   }
 `;
 
