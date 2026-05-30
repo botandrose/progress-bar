@@ -127,4 +127,91 @@ describe('progress-bar', () => {
       expect(element.hasAttribute('error')).toBe(false);
     });
   });
+
+  describe('indeterminate state', () => {
+    it('defaults to determinate with a live aria-valuenow', () => {
+      expect(element.indeterminate).toBe(false);
+      expect(element.getAttribute('aria-valuenow')).toBe('33');
+    });
+
+    it('reflects the indeterminate property to the attribute', () => {
+      element.indeterminate = true;
+      expect(element.hasAttribute('indeterminate')).toBe(true);
+
+      element.indeterminate = false;
+      expect(element.hasAttribute('indeterminate')).toBe(false);
+    });
+
+    it('drops aria-valuenow while indeterminate', () => {
+      element.indeterminate = true;
+      expect(element.hasAttribute('aria-valuenow')).toBe(false);
+    });
+
+    it('clears the inline bar width so the animation can drive it', () => {
+      element.indeterminate = true;
+      expect(element.shadowRoot.querySelector('.bar').style.width).toBe('');
+    });
+
+    it('restores aria-valuenow and width when set back to determinate', () => {
+      element.indeterminate = true;
+      element.indeterminate = false;
+      expect(element.getAttribute('aria-valuenow')).toBe('33');
+      expect(element.shadowRoot.querySelector('.bar').style.width).toBe('33%');
+    });
+  });
+
+  describe('circular mode', () => {
+    let circular;
+
+    beforeEach(() => {
+      circular = new ProgressBar();
+      circular.setAttribute('mode', 'circular');
+      circular.setAttribute('percent', '0');
+      document.body.appendChild(circular);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(circular);
+    });
+
+    it('renders an svg ring instead of a linear bar', () => {
+      expect(circular.shadowRoot.querySelector('svg.ring')).toBeTruthy();
+      expect(circular.shadowRoot.querySelector('circle.progress-ring')).toBeTruthy();
+      expect(circular.shadowRoot.querySelector('.bar')).toBeFalsy();
+    });
+
+    it('sets a full stroke-dashoffset at 0 percent', () => {
+      const circumference = 2 * Math.PI * 45;
+      const ring = circular.shadowRoot.querySelector('.progress-ring');
+      expect(Number(ring.style.strokeDashoffset)).toBeCloseTo(circumference, 2);
+    });
+
+    it('shrinks the stroke-dashoffset as percent climbs', () => {
+      const circumference = 2 * Math.PI * 45;
+      circular.percent = 50;
+      const ring = circular.shadowRoot.querySelector('.progress-ring');
+      expect(Number(ring.style.strokeDashoffset)).toBeCloseTo(circumference * 0.5, 2);
+    });
+
+    it('still keeps progressbar ARIA semantics', () => {
+      circular.percent = 50;
+      expect(circular.getAttribute('role')).toBe('progressbar');
+      expect(circular.getAttribute('aria-valuenow')).toBe('50');
+    });
+
+    it('clears the inline stroke-dashoffset while indeterminate', () => {
+      circular.percent = 50;
+      circular.indeterminate = true;
+      const ring = circular.shadowRoot.querySelector('.progress-ring');
+      expect(ring.style.strokeDashoffset).toBe('');
+      expect(circular.hasAttribute('aria-valuenow')).toBe(false);
+    });
+
+    it('reflects the mode property to the attribute', () => {
+      const el = new ProgressBar();
+      el.mode = 'circular';
+      expect(el.getAttribute('mode')).toBe('circular');
+      expect(el.mode).toBe('circular');
+    });
+  });
 });

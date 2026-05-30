@@ -87,6 +87,16 @@
     <div class="row" style="margin-top:6px"><progress-bar percent="33" error><a class="download-link" href="#" download="dark-error.xml">dark-error.xml (error state)</a></progress-bar></div>
   </section>
 
+  <section class="bg-light">
+    <h2>Indeterminate (unknown percent)</h2>
+    <div class="row"><progress-bar indeterminate><a class="download-link" href="#" download="working.xml">working.xml (linear, sweeping)</a></progress-bar></div>
+    <div class="row" style="margin-top:12px; gap:24px">
+      <progress-bar mode="circular" indeterminate></progress-bar>
+      <progress-bar mode="circular" percent="42">42%</progress-bar>
+      <progress-bar mode="circular" percent="80" error>80%</progress-bar>
+    </div>
+  </section>
+
   <section>
     <h2>External CSS set on the &lt;progress-bar&gt; element</h2>
     <p class="desc" style="font-size:13px">Properties applied to the host from the outside.
