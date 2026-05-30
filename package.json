@@ -1,6 +1,6 @@
 {
   "name": "@botandrose/progress-bar",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "A minimal progress bar web component",
   "type": "module",
   "main": "index.js",
