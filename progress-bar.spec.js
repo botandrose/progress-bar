@@ -89,4 +89,35 @@ describe('progress-bar', () => {
   it('throws on non-numeric percent rather than silently defaulting to 0', () => {
     expect(() => { element.percent = 'abc'; }).toThrow(TypeError);
   });
+
+  describe('error state', () => {
+    it('defaults to no error', () => {
+      expect(element.error).toBe(false);
+      expect(element.hasAttribute('error')).toBe(false);
+    });
+
+    it('reflects the error property to the error attribute', () => {
+      element.error = true;
+      expect(element.hasAttribute('error')).toBe(true);
+
+      element.error = false;
+      expect(element.hasAttribute('error')).toBe(false);
+    });
+
+    it('reflects the error attribute to the error property', () => {
+      element.setAttribute('error', '');
+      expect(element.error).toBe(true);
+
+      element.removeAttribute('error');
+      expect(element.error).toBe(false);
+    });
+
+    it('coerces truthy/falsy values when set via the property', () => {
+      element.error = 'yes';
+      expect(element.hasAttribute('error')).toBe(true);
+
+      element.error = 0;
+      expect(element.hasAttribute('error')).toBe(false);
+    });
+  });
 });

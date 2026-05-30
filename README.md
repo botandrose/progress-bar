@@ -35,6 +35,7 @@ bar.percent = 75;
 ### Properties
 
 - `percent` (number) - The progress percentage. Values are clamped to 0-100; a non-numeric value throws. Default: 0. Can be set as attribute or property.
+- `error` (boolean) - Whether the bar is in an error state, which recolors the fill to `--error-color`. Reflected between the `error` property and the `error` attribute, so `<progress-bar error>` and `el.error = true` are equivalent. Default: false.
 
 ### Slots
 
@@ -57,7 +58,7 @@ Custom properties are reserved for the sealed shadow internals that CSS can't ot
 ```css
 progress-bar {
   --progress-color: rgb(57, 137, 39); /* fill color */
-  --error-color: #7a242f;             /* fill color when the element has class "error" */
+  --error-color: #7a242f;             /* fill color when the element has the [error] attribute */
   --progress-duration: 120ms;         /* fill width transition */
   --bar-height: 32px;                 /* minimum bar height */
   --bar-padding: 8px;                 /* padding around the label */

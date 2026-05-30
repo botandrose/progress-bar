@@ -35,7 +35,7 @@ const STYLES = `
     z-index: -1;
   }
 
-  :host(.error) .bar {
+  :host([error]) .bar {
     background: var(--error-color);
   }
 `;
@@ -79,6 +79,14 @@ class ProgressBar extends HTMLElement {
 
   set percent(value) {
     this.setAttribute('percent', clampPercent(value));
+  }
+
+  get error() {
+    return this.hasAttribute('error');
+  }
+
+  set error(value) {
+    this.toggleAttribute('error', Boolean(value));
   }
 
   static get observedAttributes() {

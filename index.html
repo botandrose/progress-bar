@@ -77,14 +77,14 @@
     <h2>Consumer state classes</h2>
     <div class="row"><progress-bar percent="0" class="pending"><a class="download-link" href="#" download="pending.xml">pending.xml (opacity 0.5)</a></progress-bar></div>
     <div class="row" style="margin-top:6px"><progress-bar percent="100" class="complete"><a class="download-link" href="#" download="SCI-QOL-SW-Form.xml">SCI-QOL-SW-Form.xml (complete, opacity 0.8)</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="33" class="error"><a class="download-link" href="#" download="error.xml">error.xml (error bg, opacity 1)</a></progress-bar></div>
+    <div class="row" style="margin-top:6px"><progress-bar percent="33" error><a class="download-link" href="#" download="error.xml">error.xml (native [error] attribute)</a></progress-bar></div>
   </section>
 
   <section class="bg-dark">
     <h2 style="color:#ccc">On a dark page background</h2>
     <div class="row"><progress-bar percent="50"><a class="download-link" href="#" download="dark.xml">dark.xml</a></progress-bar></div>
     <div class="row" style="margin-top:6px"><progress-bar percent="100" class="complete"><a class="download-link" href="#" download="dark-complete.xml">dark-complete.xml (opacity 0.8)</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="33" class="error"><a class="download-link" href="#" download="dark-error.xml">dark-error.xml (error state)</a></progress-bar></div>
+    <div class="row" style="margin-top:6px"><progress-bar percent="33" error><a class="download-link" href="#" download="dark-error.xml">dark-error.xml (error state)</a></progress-bar></div>
   </section>
 
   <section>
@@ -169,8 +169,8 @@
         </tr>
         <tr>
           <td><code>--error-color</code></td>
-          <td class="desc"><code>#7a242f</code> — the fill color when the host has class <code>error</code>.</td>
-          <td class="preview"><progress-bar percent="60" class="error" style="--error-color:#ff7043"><a class="download-link" href="#" download="x.xml">#ff7043 (.error)</a></progress-bar></td>
+          <td class="desc"><code>#7a242f</code> — the fill color when the host has the <code>error</code> attribute.</td>
+          <td class="preview"><progress-bar percent="60" error style="--error-color:#ff7043"><a class="download-link" href="#" download="x.xml">#ff7043 ([error])</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>--bar-padding</code></td>
