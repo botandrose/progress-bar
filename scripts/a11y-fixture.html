@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>progress-bar a11y fixture</title>
+  <style>
+    body { background: #fff; margin: 1rem; }
+    /* Mirrors the consumer usage: white slotted text inside the bar. */
+    .download-link { color: #fff; text-decoration: none; }
+    progress-bar { display: block; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <!-- Representative component states. No opacity or dramatic color overrides:
+       this fixture checks the component's own contrast contract, not consumer
+       styling choices. -->
+  <progress-bar percent="0"><a class="download-link" href="#">empty.xml</a></progress-bar>
+  <progress-bar percent="50"><a class="download-link" href="#">half.xml</a></progress-bar>
+  <progress-bar percent="100"><a class="download-link" href="#">full.xml</a></progress-bar>
+  <progress-bar percent="33" error><a class="download-link" href="#">error.xml</a></progress-bar>
+
+  <script type="module">import "../index.js";</script>
+</body>
+</html>

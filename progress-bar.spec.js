@@ -38,17 +38,24 @@ describe('progress-bar', () => {
 
   it('renders shadow DOM structure', () => {
     const bar = element.shadowRoot.querySelector('.bar');
-    const content = element.shadowRoot.querySelector('.content');
+    const text = element.shadowRoot.querySelector('.text');
     expect(bar).toBeTruthy();
-    expect(content).toBeTruthy();
+    expect(text).toBeTruthy();
   });
 
-  it('nests bar inside content so slotted text has a background ancestor for contrast detection', () => {
-    const content = element.shadowRoot.querySelector('.content');
-    const bar = element.shadowRoot.querySelector('.bar');
-    const slot = element.shadowRoot.querySelector('slot');
-    expect(content.contains(bar)).toBe(true);
-    expect(content.contains(slot)).toBe(true);
+  // The host paints the track background, so slotted text always has a
+  // background-painting ancestor that axe-core can resolve for contrast.
+  // jsdom can't compute :host background or run real contrast, so the actual
+  // contrast guarantee is verified against a browser in scripts/a11y.mjs; here
+  // we only guard the structural invariant: the fill and the slotted text are
+  // siblings under the host, and the text is never nested inside the fill.
+  it('keeps the fill and slotted text as siblings under the host, never nesting text inside the fill', () => {
+    const sr = element.shadowRoot;
+    const bar = sr.querySelector('.bar');
+    const slot = sr.querySelector('slot');
+    expect(sr.contains(bar)).toBe(true);
+    expect(sr.contains(slot)).toBe(true);
+    expect(bar.contains(slot)).toBe(false);
   });
 
   it('renders slotted content', () => {
