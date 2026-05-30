@@ -14,7 +14,7 @@ const STYLES = `
     --circular-thickness: 8;
     display: block;
     overflow: hidden;
-    background: #333333;
+    background: var(--track-color);
     border: 1px solid #999;
     border-radius: 4px;
     min-height: var(--bar-height);
@@ -101,7 +101,7 @@ const STYLES = `
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: inherit;
     font-size: 13px;
   }
 
