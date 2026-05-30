@@ -10,20 +10,14 @@ const STYLES = `
     background: #333333;
     border: 1px solid #999;
     border-radius: 4px;
-  }
-
-  .content {
-    position: relative;
-    display: flex;
-    align-items: center;
     min-height: var(--bar-height);
-    box-sizing: border-box;
     padding: var(--bar-padding);
-    color: white;
     font-size: 13px;
-    z-index: 0;
+    color: white;
+    align-content: center;
+    box-sizing: border-box;
+    position: relative;
   }
-
   .bar {
     position: absolute;
     top: 0;
@@ -32,9 +26,9 @@ const STYLES = `
     width: 0%;
     background: var(--progress-color);
     transition: width var(--progress-duration) ease;
-    z-index: -1;
+    z-index: 1;
   }
-
+  .text{position: relative; z-index: 2;}
   :host([error]) .bar {
     background: var(--error-color);
   }
@@ -111,10 +105,8 @@ class ProgressBar extends HTMLElement {
   render() {
     this.shadowRoot.adoptedStyleSheets = [getStyleSheet()];
     this.shadowRoot.innerHTML = `
-      <span class="content">
-        <div class="bar"></div>
-        <slot></slot>
-      </span>
+      <div class="bar"></div>
+      <div class="text"><slot></slot></div>
     `;
     this.setAttribute('role', 'progressbar');
     this.setAttribute('aria-valuemin', '0');
