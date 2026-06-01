@@ -30,19 +30,37 @@
     .row progress-bar {
       flex: 1 0;
     }
-    .circ-row {
+    .example {
       display: flex;
-      gap: 24px;
+      gap: 16px;
       align-items: center;
-      flex-wrap: wrap;
+      margin-top: 10px;
     }
-    .circ-row progress-bar {
-      flex: 0 0 auto;
+    .example:first-of-type {
+      margin-top: 0;
+    }
+    .example > pre {
+      flex: 1 1 0;
+      min-width: 0;
+      margin: 0;
+      background: #1e1e1e;
+      color: #e6e6e6;
+      font-size: 12px;
+      line-height: 1.45;
+      padding: 8px 10px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .example > .render {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+    .example > .render > progress-bar {
+      display: block;
     }
 
-    /* Mirror the relevant rules from bard-attachment_field's
-       attachment-file.css that affect the slotted content */
-    .download-link { color: #fff; text-decoration: none; padding-right: 20px; }
+    a { color: #fff; text-decoration: none; padding-right: 20px; }
     progress-bar.complete { opacity: 1.0; }
     .bg-dark  { background: #222; color: #eee; padding: 1rem; border-radius: 4px; }
     .bg-light { background: #fff; padding: 1rem; border-radius: 4px; }
@@ -70,52 +88,46 @@
   <h1>&lt;progress-bar&gt; demo</h1>
   <p>Each row mimics the consumer usage inside
     <code>&lt;attachment-file&gt;</code>: a slotted
-    <code>&lt;a class="download-link"&gt;</code> with white text.</p>
+    <code>&lt;a&gt;</code> with white text.</p>
 
   <section class="bg-light">
     <h2>Fill levels (on light background)</h2>
-    <div class="row"><progress-bar percent="0"><a class="download-link" href="#" download="zero.xml">zero.xml</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="25"><a class="download-link" href="#" download="quarter.xml">quarter.xml</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="50"><a class="download-link" href="#" download="half.xml">half.xml</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="75"><a class="download-link" href="#" download="three-quarters.xml">three-quarters.xml</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="100"><a class="download-link" href="#" download="full.xml">full.xml</a></progress-bar></div>
+    <div class="example"><progress-bar percent="0"><a href="#">zero.xml</a></progress-bar></div>
+    <div class="example"><progress-bar percent="25"><a href="#">quarter.xml</a></progress-bar></div>
+    <div class="example"><progress-bar percent="50"><a href="#">half.xml</a></progress-bar></div>
+    <div class="example"><progress-bar percent="75"><a href="#">three-quarters.xml</a></progress-bar></div>
+    <div class="example"><progress-bar percent="100"><a href="#">full.xml</a></progress-bar></div>
   </section>
 
   <section class="bg-light">
     <h2>Circular fill levels</h2>
-    <div class="circ-row">
-      <progress-bar mode="circular" percent="0">0%</progress-bar>
-      <progress-bar mode="circular" percent="25">25%</progress-bar>
-      <progress-bar mode="circular" percent="50">50%</progress-bar>
-      <progress-bar mode="circular" percent="75">75%</progress-bar>
-      <progress-bar mode="circular" percent="100">100%</progress-bar>
-    </div>
+    <div class="example"><progress-bar mode="circular" percent="0">0%</progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="25">25%</progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="50">50%</progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="75">75%</progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="100">100%</progress-bar></div>
   </section>
 
   <section class="bg-light">
     <h2>Consumer state classes</h2>
-    <div class="row"><progress-bar percent="100" class="complete"><a class="download-link" href="#" download="SCI-QOL-SW-Form.xml">SCI-QOL-SW-Form.xml (complete, opacity 0.8)</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="33" error><a class="download-link" href="#" download="error.xml">error.xml (native [error] attribute)</a></progress-bar></div>
+    <div class="example"><progress-bar percent="100" class="complete"><a href="#">SCI-QOL-SW-Form.xml (complete, opacity 0.8)</a></progress-bar></div>
+    <div class="example"><progress-bar percent="33" error><a href="#">error.xml (native [error] attribute)</a></progress-bar></div>
   </section>
 
   <section class="bg-light">
     <h2>Circular state classes</h2>
-    <div class="circ-row">
-      <progress-bar mode="circular" percent="100" class="complete">100%</progress-bar>
-      <progress-bar mode="circular" percent="33" error>33%</progress-bar>
-    </div>
+    <div class="example"><progress-bar mode="circular" percent="100" class="complete">100%</progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="33" error>33%</progress-bar></div>
   </section>
 
   <section class="bg-dark">
     <h2 style="color:#ccc">On a dark page background</h2>
-    <div class="row"><progress-bar percent="50"><a class="download-link" href="#" download="dark.xml">dark.xml</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="100" class="complete"><a class="download-link" href="#" download="dark-complete.xml">dark-complete.xml (opacity 0.8)</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="33" error><a class="download-link" href="#" download="dark-error.xml">dark-error.xml (error state)</a></progress-bar></div>
-    <div class="circ-row" style="margin-top:12px">
-      <progress-bar mode="circular" percent="50">50%</progress-bar>
-      <progress-bar mode="circular" percent="100" class="complete">100%</progress-bar>
-      <progress-bar mode="circular" percent="33" error>33%</progress-bar>
-    </div>
+    <div class="example"><progress-bar percent="50"><a href="#">dark.xml</a></progress-bar></div>
+    <div class="example"><progress-bar percent="100" class="complete"><a href="#">dark-complete.xml (opacity 0.8)</a></progress-bar></div>
+    <div class="example"><progress-bar percent="33" error><a href="#">dark-error.xml (error state)</a></progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="50">50%</progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="100" class="complete">100%</progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="33" error>33%</progress-bar></div>
   </section>
 
   <section class="bg-light">
@@ -123,10 +135,8 @@
     <p class="desc" style="font-size:13px">A <code>&lt;progress-bar&gt;</code> with no <code>percent</code> attribute (or
       <code>percent = null</code>) is indeterminate: the fill sweeps (linear) or the arc spins (circular) and
       <code>aria-valuenow</code> is dropped. Set a numeric <code>percent</code> to make it determinate.</p>
-    <div class="row"><progress-bar><a class="download-link" href="#" download="working.xml">working.xml (linear, sweeping)</a></progress-bar></div>
-    <div class="circ-row" style="margin-top:12px">
-      <progress-bar mode="circular"></progress-bar>
-    </div>
+    <div class="example"><progress-bar><a href="#">working.xml (linear, sweeping)</a></progress-bar></div>
+    <div class="example"><progress-bar mode="circular"></progress-bar></div>
   </section>
 
   <section>
@@ -142,52 +152,52 @@
         <tr>
           <td><code>padding: 16px</code></td>
           <td class="desc">Host padding sits between the border and the content, filled with the track color (the fill stays inside <code>.content</code>).</td>
-          <td class="preview"><progress-bar percent="60" style="padding:16px"><a class="download-link" href="#" download="x.xml">padding.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="padding:16px"><a href="#">padding.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>margin: 0 0 0 40px</code></td>
           <td class="desc">Normal outer margin; offsets the whole element.</td>
-          <td class="preview"><progress-bar percent="60" style="margin:0 0 0 40px"><a class="download-link" href="#" download="x.xml">margin.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="margin:0 0 0 40px"><a href="#">margin.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>width: 200px</code></td>
           <td class="desc">Constrains the element width; fill percent is relative to it.</td>
-          <td class="preview"><progress-bar percent="60" style="width:200px"><a class="download-link" href="#" download="x.xml">width.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="width:200px"><a href="#">width.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>border: 3px dashed #c2185b</code></td>
           <td class="desc">Overrides the component's default <code>1px solid #999</code> host border (no CSS variable needed).</td>
-          <td class="preview"><progress-bar percent="60" style="border:3px dashed #c2185b"><a class="download-link" href="#" download="x.xml">border.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="border:3px dashed #c2185b"><a href="#">border.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>background: #9e9e9e</code></td>
           <td class="desc">Sets the unfilled track color — it's just the host background; the fill (<code>.bar</code>) sits on top.</td>
-          <td class="preview"><progress-bar percent="60" style="background:#9e9e9e"><a class="download-link" href="#" download="x.xml">background.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="background:#9e9e9e"><a href="#">background.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>border-radius: 16px</code></td>
           <td class="desc">Rounds the host; the fill is clipped to match because the host sets <code>overflow: hidden</code>.</td>
-          <td class="preview"><progress-bar percent="60" style="border-radius:16px"><a class="download-link" href="#" download="x.xml">radius.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="border-radius:16px"><a href="#">radius.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>box-shadow: 0 2px 8px rgba(0,0,0,.5)</code></td>
           <td class="desc">Applies to the host box; the component never sets its own shadow.</td>
-          <td class="preview"><progress-bar percent="60" style="box-shadow:0 2px 8px rgba(0,0,0,.5)"><a class="download-link" href="#" download="x.xml">shadow.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="box-shadow:0 2px 8px rgba(0,0,0,.5)"><a href="#">shadow.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>opacity: 0.4</code></td>
           <td class="desc">Fades the entire element — a consumer can use it to mark, say, a disabled or superseded item.</td>
-          <td class="preview"><progress-bar percent="60" style="opacity:0.4"><a class="download-link" href="#" download="x.xml">opacity.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="opacity:0.4"><a href="#">opacity.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>transform: scale(1.1) rotate(-2deg)</code></td>
           <td class="desc">Transforms the host box as a unit, fill and text included.</td>
-          <td class="preview"><progress-bar percent="60" style="transform:scale(1.1) rotate(-2deg)"><a class="download-link" href="#" download="x.xml">transform.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="transform:scale(1.1) rotate(-2deg)"><a href="#">transform.xml</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>font-size: 20px</code></td>
           <td class="desc">No effect on the label: <code>.content</code> sets its own <code>font-size: 13px</code> inside the shadow root, which wins for slotted text.</td>
-          <td class="preview"><progress-bar percent="60" style="font-size:20px"><a class="download-link" href="#" download="x.xml">font-size.xml</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="font-size:20px"><a href="#">font-size.xml</a></progress-bar></td>
         </tr>
       </tbody>
     </table>
@@ -272,27 +282,27 @@
         <tr>
           <td><code>--progress-color</code></td>
           <td class="desc"><code>#2E7D32</code> — the fill color.</td>
-          <td class="preview"><progress-bar percent="60" style="--progress-color:#1565c0"><a class="download-link" href="#" download="x.xml">#1565c0</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="--progress-color:#1565c0"><a href="#">#1565c0</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>--error-color</code></td>
           <td class="desc"><code>#7a242f</code> — the fill color when the host has the <code>error</code> attribute.</td>
-          <td class="preview"><progress-bar percent="60" error style="--error-color:#ff7043"><a class="download-link" href="#" download="x.xml">#ff7043 ([error])</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" error style="--error-color:#ff7043"><a href="#">#ff7043 ([error])</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>--bar-padding</code></td>
           <td class="desc"><code>8px</code> — padding around the label inside the fill area.</td>
-          <td class="preview"><progress-bar percent="60" style="--bar-padding:18px"><a class="download-link" href="#" download="x.xml">18px</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="--bar-padding:18px"><a href="#">18px</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>--bar-height</code></td>
           <td class="desc"><code>32px</code> — minimum height of the bar; label is vertically centered.</td>
-          <td class="preview"><progress-bar percent="60" style="--bar-height:64px"><a class="download-link" href="#" download="x.xml">64px</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="--bar-height:64px"><a href="#">64px</a></progress-bar></td>
         </tr>
         <tr>
           <td><code>--progress-duration</code></td>
           <td class="desc"><code>120ms</code> — width transition time (drive the slider below to feel it).</td>
-          <td class="preview"><progress-bar percent="60" style="--progress-duration:1500ms"><a class="download-link" href="#" download="x.xml">1500ms</a></progress-bar></td>
+          <td class="preview"><progress-bar percent="60" style="--progress-duration:1500ms"><a href="#">1500ms</a></progress-bar></td>
         </tr>
       </tbody>
     </table>
@@ -346,13 +356,40 @@
     <h2>Interactive: drag to set percent</h2>
     <div class="row">
       <input id="slider" type="range" min="0" max="100" value="42" style="flex:0 0 160px">
-      <progress-bar id="live" percent="42"><a class="download-link" href="#" download="live.xml">live.xml</a></progress-bar>
+      <progress-bar id="live" percent="42"><a href="#">live.xml</a></progress-bar>
       <progress-bar id="liveCircular" mode="circular" percent="42" style="flex:0 0 auto">42%</progress-bar>
     </div>
   </section>
 
   <script type="module">
     import "./index.js";
+
+    // For each standalone example, show its source HTML to the left of the live render.
+    // role/aria-* are injected by the component at runtime, not authored — hide them.
+    const RUNTIME_ATTRS = new Set(["role", "aria-valuemin", "aria-valuemax", "aria-valuenow"]);
+    const sourceFor = el => {
+      const tag = el.tagName.toLowerCase();
+      const attrs = [...el.attributes]
+        .filter(a => !RUNTIME_ATTRS.has(a.name))
+        .map(a => a.value === "" ? a.name : `${a.name}="${a.value}"`)
+        .join(" ");
+      const open = attrs ? `<${tag} ${attrs}>` : `<${tag}>`;
+      const inner = el.innerHTML.trim();
+      if (!inner) return `${open}</${tag}>`;
+      if (inner.includes("<") || inner.length > 20) return `${open}\n  ${inner}\n</${tag}>`;
+      return `${open}${inner}</${tag}>`;
+    };
+
+    document.querySelectorAll(".example").forEach(example => {
+      const bar = example.querySelector("progress-bar");
+      const code = document.createElement("pre");
+      code.textContent = sourceFor(bar);
+      const render = document.createElement("div");
+      render.className = "render";
+      render.appendChild(bar);
+      example.append(code, render);
+    });
+
     const slider = document.getElementById("slider");
     const live = document.getElementById("live");
     const liveCircular = document.getElementById("liveCircular");
