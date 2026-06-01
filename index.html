@@ -81,6 +81,7 @@
     table.demo .preview { width: 45%; }
     table.demo .preview progress-bar { display: block; }
     table.demo.variables .preview code.override-value { display: block; margin-bottom: 6px; }
+    table.demo .preview progress-bar[mode="circular"] { display: inline-block; }
     table.demo .desc { color: #555; }
   </style>
 </head>
@@ -133,6 +134,12 @@
     <p class="desc" style="font-size:13px">A <code>&lt;progress-bar&gt;</code> with no <code>percent</code> attribute (or
       <code>percent = null</code>) is indeterminate: the fill sweeps (linear) or the arc spins (circular) and
       <code>aria-valuenow</code> is dropped. Set a numeric <code>percent</code> to make it determinate.</p>
+    <div class="example"><progress-bar><a href="#">working.xml (linear, sweeping)</a></progress-bar></div>
+    <div class="example"><progress-bar mode="circular"></progress-bar></div>
+  </section>
+
+  <section class="bg-dark">
+    <h2 style="color:#ccc">Indeterminate on a dark page background</h2>
     <div class="example"><progress-bar><a href="#">working.xml (linear, sweeping)</a></progress-bar></div>
     <div class="example"><progress-bar mode="circular"></progress-bar></div>
   </section>
@@ -255,7 +262,7 @@
         <tr>
           <td><code>color: #1565c0</code></td>
           <td class="desc">The label inherits the host color (<code>.label</code> uses <code>color: inherit</code>), so the centered text picks this up.</td>
-          <td class="preview"><progress-bar mode="circular" percent="60" style="color:#1565c0">60%</progress-bar></td>
+          <td class="preview"><progress-bar mode="circular" percent="60" style="color:#1565c0;">60%</progress-bar></td>
         </tr>
         <tr>
           <td><code>font-size: 20px</code></td>
