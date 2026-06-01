@@ -43,7 +43,6 @@
     /* Mirror the relevant rules from bard-attachment_field's
        attachment-file.css that affect the slotted content */
     .download-link { color: #fff; text-decoration: none; padding-right: 20px; }
-    progress-bar.pending  { opacity: 0.5; }
     progress-bar.complete { opacity: 1.0; }
     .bg-dark  { background: #222; color: #eee; padding: 1rem; border-radius: 4px; }
     .bg-light { background: #fff; padding: 1rem; border-radius: 4px; }
@@ -95,15 +94,13 @@
 
   <section class="bg-light">
     <h2>Consumer state classes</h2>
-    <div class="row"><progress-bar percent="0" class="pending"><a class="download-link" href="#" download="pending.xml">pending.xml (opacity 0.5)</a></progress-bar></div>
-    <div class="row" style="margin-top:6px"><progress-bar percent="100" class="complete"><a class="download-link" href="#" download="SCI-QOL-SW-Form.xml">SCI-QOL-SW-Form.xml (complete, opacity 0.8)</a></progress-bar></div>
+    <div class="row"><progress-bar percent="100" class="complete"><a class="download-link" href="#" download="SCI-QOL-SW-Form.xml">SCI-QOL-SW-Form.xml (complete, opacity 0.8)</a></progress-bar></div>
     <div class="row" style="margin-top:6px"><progress-bar percent="33" error><a class="download-link" href="#" download="error.xml">error.xml (native [error] attribute)</a></progress-bar></div>
   </section>
 
   <section class="bg-light">
     <h2>Circular state classes</h2>
     <div class="circ-row">
-      <progress-bar mode="circular" percent="0" class="pending">0%</progress-bar>
       <progress-bar mode="circular" percent="100" class="complete">100%</progress-bar>
       <progress-bar mode="circular" percent="33" error>33%</progress-bar>
     </div>
@@ -122,10 +119,13 @@
   </section>
 
   <section class="bg-light">
-    <h2>Indeterminate (unknown percent)</h2>
-    <div class="row"><progress-bar indeterminate><a class="download-link" href="#" download="working.xml">working.xml (linear, sweeping)</a></progress-bar></div>
+    <h2>Indeterminate (the default — no <code>percent</code> set)</h2>
+    <p class="desc" style="font-size:13px">A <code>&lt;progress-bar&gt;</code> with no <code>percent</code> attribute (or
+      <code>percent = null</code>) is indeterminate: the fill sweeps (linear) or the arc spins (circular) and
+      <code>aria-valuenow</code> is dropped. Set a numeric <code>percent</code> to make it determinate.</p>
+    <div class="row"><progress-bar><a class="download-link" href="#" download="working.xml">working.xml (linear, sweeping)</a></progress-bar></div>
     <div class="circ-row" style="margin-top:12px">
-      <progress-bar mode="circular" indeterminate></progress-bar>
+      <progress-bar mode="circular"></progress-bar>
     </div>
   </section>
 
@@ -176,7 +176,7 @@
         </tr>
         <tr>
           <td><code>opacity: 0.4</code></td>
-          <td class="desc">Fades the entire element, identical to the consumer <code>.pending</code> class.</td>
+          <td class="desc">Fades the entire element — a consumer can use it to mark, say, a disabled or superseded item.</td>
           <td class="preview"><progress-bar percent="60" style="opacity:0.4"><a class="download-link" href="#" download="x.xml">opacity.xml</a></progress-bar></td>
         </tr>
         <tr>
@@ -241,7 +241,7 @@
         </tr>
         <tr>
           <td><code>opacity: 0.4</code></td>
-          <td class="desc">Fades the entire element, identical to the consumer <code>.pending</code> class.</td>
+          <td class="desc">Fades the entire element — a consumer can use it to mark, say, a disabled or superseded item.</td>
           <td class="preview"><progress-bar mode="circular" percent="60" style="opacity:0.4">60%</progress-bar></td>
         </tr>
         <tr>

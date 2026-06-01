@@ -34,15 +34,16 @@ bar.percent = 75;
 
 ### Properties
 
-- `percent` (number) - The progress percentage. Values are clamped to 0-100; a non-numeric value throws. Default: 0. Can be set as attribute or property.
+- `percent` (number | null) - The progress percentage. Numeric values are clamped to 0-100; a non-numeric value throws. When unset — no `percent` attribute, or `percent = null` — the bar is **indeterminate**: the fill animates as a sweeping segment (a spinning arc in circular mode) and `aria-valuenow` is dropped, the standard signal for an indeterminate progressbar. Set a number to make it determinate. Default: indeterminate. Can be set as attribute or property.
 - `error` (boolean) - Whether the bar is in an error state, which recolors the fill to `--error-color`. Reflected between the `error` property and the `error` attribute, so `<progress-bar error>` and `el.error = true` are equivalent. Default: false.
-- `indeterminate` (boolean) - Whether the progress is unknown. While indeterminate the fill animates as a sweeping segment (or, in circular mode, a spinning arc) and `aria-valuenow` is dropped, which is the standard signal for an indeterminate progressbar. Setting a determinate `percent` does not clear it — toggle `indeterminate` off explicitly. Reflected between property and attribute. Default: false.
-- `mode` (string) - `"linear"` (default) renders the horizontal fill bar; `"circular"` renders an SVG ring whose arc tracks `percent`, with the slotted content centered. Both modes honor `error` and `indeterminate`.
+- `indeterminate` (boolean, read-only) - Whether the bar is indeterminate, i.e. whether `percent` is unset. There is no `indeterminate` attribute — drive it through `percent` (omit it, or set the property to `null`).
+- `mode` (string) - `"linear"` (default) renders the horizontal fill bar; `"circular"` renders an SVG ring whose arc tracks `percent`, with the slotted content centered. Both modes honor `error` and the indeterminate (no-percent) state.
 
 ```html
-<progress-bar indeterminate>working…</progress-bar>
+<progress-bar>working…</progress-bar>              <!-- indeterminate: no percent -->
+<progress-bar percent="50">file.pdf</progress-bar>
 <progress-bar mode="circular" percent="42">42%</progress-bar>
-<progress-bar mode="circular" indeterminate></progress-bar>
+<progress-bar mode="circular"></progress-bar>      <!-- indeterminate -->
 ```
 
 ### Slots

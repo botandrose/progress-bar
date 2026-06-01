@@ -40,8 +40,8 @@ const STYLES = `
     background: var(--error-color);
   }
 
-  /* Indeterminate (linear): a fixed-width segment sweeping across the track. */
-  :host([indeterminate]) .bar {
+  /* Indeterminate (linear): no percent set — a fixed-width segment sweeping across the track. */
+  :host(:not([percent])) .bar {
     width: 40%;
     animation: indeterminate-linear var(--indeterminate-duration) infinite linear;
   }
@@ -102,12 +102,12 @@ const STYLES = `
     font-size: 13px;
   }
 
-  /* Indeterminate (circular): spin a fixed arc around the ring. */
-  :host([indeterminate]) .ring {
+  /* Indeterminate (circular): no percent set — spin a fixed arc around the ring. */
+  :host(:not([percent])) .ring {
     animation: indeterminate-rotate var(--indeterminate-duration) infinite linear;
   }
 
-  :host([indeterminate]) .progress-ring {
+  :host(:not([percent])) .progress-ring {
     stroke-dashoffset: ${CIRCUMFERENCE * 0.75};
   }
 
@@ -155,7 +155,7 @@ class ProgressBar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this._percent = 0;
+    this._percent = null;
     this._renderedMode = null;
   }
 
@@ -172,7 +172,11 @@ class ProgressBar extends HTMLElement {
   }
 
   set percent(value) {
-    this.setAttribute('percent', clampPercent(value));
+    if (value === null || value === undefined) {
+      this.removeAttribute('percent');
+    } else {
+      this.setAttribute('percent', clampPercent(value));
+    }
   }
 
   get error() {
@@ -184,11 +188,7 @@ class ProgressBar extends HTMLElement {
   }
 
   get indeterminate() {
-    return this.hasAttribute('indeterminate');
-  }
-
-  set indeterminate(value) {
-    this.toggleAttribute('indeterminate', Boolean(value));
+    return !this.hasAttribute('percent');
   }
 
   get mode() {
@@ -200,12 +200,12 @@ class ProgressBar extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['percent', 'mode', 'indeterminate'];
+    return ['percent', 'mode'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'percent') {
-      this._percent = clampPercent(newValue);
+      this._percent = newValue === null ? null : clampPercent(newValue);
     }
     if (name === 'mode') {
       this.render();
