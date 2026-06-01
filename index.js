@@ -1,5 +1,5 @@
-const CIRCLE_RADIUS = 45;
-const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
+const CIRCLE_RADIUS = 40; // fallback r attribute; CSS shrinks it to fit the stroke
+const PATH_LENGTH = 100;  // normalize the arc so dash math is independent of the radius
 
 const STYLES = `
   :host {
@@ -11,7 +11,7 @@ const STYLES = `
     --bar-height: 32px;
     --bar-padding: 8px;
     --circular-size: 64px;
-    --circular-thickness: 8;
+    --circular-thickness: 16;
     display: block;
     overflow: hidden;
     background: var(--track-color);
@@ -77,6 +77,9 @@ const STYLES = `
   .ring circle {
     fill: none;
     stroke-width: var(--circular-thickness);
+    /* Shrink the radius so the stroke's outer edge always lands inside the
+       100x100 viewBox, no matter how thick --circular-thickness is. */
+    r: calc(49px - var(--circular-thickness) * 0.5px);
   }
 
   .track {
@@ -86,8 +89,8 @@ const STYLES = `
   .progress-ring {
     stroke: var(--progress-color);
     stroke-linecap: round;
-    stroke-dasharray: ${CIRCUMFERENCE};
-    stroke-dashoffset: ${CIRCUMFERENCE};
+    stroke-dasharray: ${PATH_LENGTH};
+    stroke-dashoffset: ${PATH_LENGTH};
     transition: stroke-dashoffset var(--progress-duration) ease;
   }
 
@@ -111,7 +114,7 @@ const STYLES = `
   }
 
   :host(:not([percent])) .progress-ring {
-    stroke-dashoffset: ${CIRCUMFERENCE * 0.75};
+    stroke-dashoffset: ${PATH_LENGTH * 0.75};
   }
 
   @keyframes indeterminate-rotate {
@@ -129,7 +132,7 @@ const CIRCULAR_HTML = `
   <div class="circular">
     <svg class="ring" viewBox="0 0 100 100">
       <circle class="track" cx="50" cy="50" r="${CIRCLE_RADIUS}"></circle>
-      <circle class="progress-ring" cx="50" cy="50" r="${CIRCLE_RADIUS}"></circle>
+      <circle class="progress-ring" cx="50" cy="50" r="${CIRCLE_RADIUS}" pathLength="${PATH_LENGTH}"></circle>
     </svg>
     <span class="label"><slot></slot></span>
   </div>
@@ -220,7 +223,7 @@ class ProgressBar extends HTMLElement {
       if (ring) {
         ring.style.strokeDashoffset = this.indeterminate
           ? ''
-          : String(CIRCUMFERENCE * (1 - this._percent / 100));
+          : String(PATH_LENGTH * (1 - this._percent / 100));
       }
     } else {
       const bar = this.shadowRoot?.querySelector('.bar');

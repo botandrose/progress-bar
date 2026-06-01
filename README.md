@@ -74,7 +74,7 @@ progress-bar {
   --track-color: #333333;             /* unfilled ring color (circular) */
   --indeterminate-duration: 1.5s;     /* sweep / spin animation period */
   --circular-size: 64px;              /* ring diameter (circular) */
-  --circular-thickness: 8;            /* ring stroke width (circular) */
+  --circular-thickness: 16;           /* ring stroke width (circular); radius auto-fits any value */
 }
 ```
 

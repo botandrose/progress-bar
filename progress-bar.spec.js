@@ -179,16 +179,15 @@ describe('progress-bar', () => {
     });
 
     it('sets a full stroke-dashoffset at 0 percent', () => {
-      const circumference = 2 * Math.PI * 45;
+      // pathLength is normalized to 100, so the offset is on a 0-100 scale.
       const ring = circular.shadowRoot.querySelector('.progress-ring');
-      expect(Number(ring.style.strokeDashoffset)).toBeCloseTo(circumference, 2);
+      expect(Number(ring.style.strokeDashoffset)).toBe(100);
     });
 
     it('shrinks the stroke-dashoffset as percent climbs', () => {
-      const circumference = 2 * Math.PI * 45;
       circular.percent = 50;
       const ring = circular.shadowRoot.querySelector('.progress-ring');
-      expect(Number(ring.style.strokeDashoffset)).toBeCloseTo(circumference * 0.5, 2);
+      expect(Number(ring.style.strokeDashoffset)).toBe(50);
     });
 
     it('still keeps progressbar ARIA semantics', () => {
