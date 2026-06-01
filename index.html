@@ -148,7 +148,7 @@
       <tbody>
         <tr>
           <td><code>padding: 16px</code></td>
-          <td class="desc">Host padding sits between the border and the content, filled with the track color (the fill stays inside <code>.content</code>).</td>
+          <td class="desc">Host padding insets the slotted label; the host paints the track behind it and the fill (<code>.bar</code>) still spans the full inner box.</td>
           <td class="preview"><progress-bar percent="60" style="padding:16px"><a href="#">padding.xml</a></progress-bar></td>
         </tr>
         <tr>
@@ -193,7 +193,7 @@
         </tr>
         <tr>
           <td><code>font-size: 20px</code></td>
-          <td class="desc">No effect on the label: <code>.content</code> sets its own <code>font-size: 13px</code> inside the shadow root, which wins for slotted text.</td>
+          <td class="desc">Enlarges the label: the host sets <code>font-size: 13px</code> and the slotted text inherits it, so an outside <code>font-size</code> wins.</td>
           <td class="preview"><progress-bar percent="60" style="font-size:20px"><a href="#">font-size.xml</a></progress-bar></td>
         </tr>
       </tbody>
