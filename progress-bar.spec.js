@@ -63,11 +63,13 @@ describe('progress-bar', () => {
     expect(slot).toBeTruthy();
   });
 
-  it('defaults percent to 0', () => {
+  it('is indeterminate by default when percent is unset', () => {
     const newElement = new ProgressBar();
     document.body.appendChild(newElement);
-    const bar = newElement.shadowRoot.querySelector('.bar');
-    expect(bar.style.width).toBe('0%');
+    expect(newElement.percent).toBe(null);
+    expect(newElement.indeterminate).toBe(true);
+    expect(newElement.shadowRoot.querySelector('.bar').style.width).toBe('');
+    expect(newElement.hasAttribute('aria-valuenow')).toBe(false);
     document.body.removeChild(newElement);
   });
 
@@ -129,32 +131,28 @@ describe('progress-bar', () => {
   });
 
   describe('indeterminate state', () => {
-    it('defaults to determinate with a live aria-valuenow', () => {
+    it('is determinate with a live aria-valuenow once percent is set', () => {
       expect(element.indeterminate).toBe(false);
       expect(element.getAttribute('aria-valuenow')).toBe('33');
     });
 
-    it('reflects the indeterminate property to the attribute', () => {
-      element.indeterminate = true;
-      expect(element.hasAttribute('indeterminate')).toBe(true);
-
-      element.indeterminate = false;
-      expect(element.hasAttribute('indeterminate')).toBe(false);
+    it('becomes indeterminate when percent is set to null', () => {
+      element.percent = null;
+      expect(element.indeterminate).toBe(true);
+      expect(element.hasAttribute('percent')).toBe(false);
+      expect(element.percent).toBe(null);
     });
 
-    it('drops aria-valuenow while indeterminate', () => {
-      element.indeterminate = true;
+    it('drops aria-valuenow and inline width while indeterminate', () => {
+      element.percent = null;
       expect(element.hasAttribute('aria-valuenow')).toBe(false);
-    });
-
-    it('clears the inline bar width so the animation can drive it', () => {
-      element.indeterminate = true;
       expect(element.shadowRoot.querySelector('.bar').style.width).toBe('');
     });
 
-    it('restores aria-valuenow and width when set back to determinate', () => {
-      element.indeterminate = true;
-      element.indeterminate = false;
+    it('restores aria-valuenow and width when percent is set back to a number', () => {
+      element.percent = null;
+      element.percent = 33;
+      expect(element.indeterminate).toBe(false);
       expect(element.getAttribute('aria-valuenow')).toBe('33');
       expect(element.shadowRoot.querySelector('.bar').style.width).toBe('33%');
     });
@@ -199,9 +197,9 @@ describe('progress-bar', () => {
       expect(circular.getAttribute('aria-valuenow')).toBe('50');
     });
 
-    it('clears the inline stroke-dashoffset while indeterminate', () => {
+    it('clears the inline stroke-dashoffset when percent is unset', () => {
       circular.percent = 50;
-      circular.indeterminate = true;
+      circular.percent = null;
       const ring = circular.shadowRoot.querySelector('.progress-ring');
       expect(ring.style.strokeDashoffset).toBe('');
       expect(circular.hasAttribute('aria-valuenow')).toBe(false);
