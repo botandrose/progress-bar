@@ -61,7 +61,6 @@
     }
 
     a { color: #fff; text-decoration: none; padding-right: 20px; }
-    progress-bar.complete { opacity: 1.0; }
     .bg-dark  { background: #222; color: #eee; padding: 1rem; border-radius: 4px; }
     .bg-light { background: #fff; padding: 1rem; border-radius: 4px; }
 
@@ -109,24 +108,22 @@
   </section>
 
   <section class="bg-light">
-    <h2>Consumer state classes</h2>
-    <div class="example"><progress-bar percent="100" class="complete"><a href="#">SCI-QOL-SW-Form.xml (complete, opacity 0.8)</a></progress-bar></div>
+    <h2>Error state</h2>
     <div class="example"><progress-bar percent="33" error><a href="#">error.xml (native [error] attribute)</a></progress-bar></div>
   </section>
 
   <section class="bg-light">
-    <h2>Circular state classes</h2>
-    <div class="example"><progress-bar mode="circular" percent="100" class="complete">100%</progress-bar></div>
+    <h2>Circular error state</h2>
     <div class="example"><progress-bar mode="circular" percent="33" error>33%</progress-bar></div>
   </section>
 
   <section class="bg-dark">
     <h2 style="color:#ccc">On a dark page background</h2>
     <div class="example"><progress-bar percent="50"><a href="#">dark.xml</a></progress-bar></div>
-    <div class="example"><progress-bar percent="100" class="complete"><a href="#">dark-complete.xml (opacity 0.8)</a></progress-bar></div>
+    <div class="example"><progress-bar percent="100"><a href="#">dark-full.xml</a></progress-bar></div>
     <div class="example"><progress-bar percent="33" error><a href="#">dark-error.xml (error state)</a></progress-bar></div>
     <div class="example"><progress-bar mode="circular" percent="50">50%</progress-bar></div>
-    <div class="example"><progress-bar mode="circular" percent="100" class="complete">100%</progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="100">100%</progress-bar></div>
     <div class="example"><progress-bar mode="circular" percent="33" error>33%</progress-bar></div>
   </section>
 
