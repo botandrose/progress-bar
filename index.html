@@ -80,6 +80,7 @@
     table.demo code { font-size: 12px; background: #eee; padding: 1px 4px; border-radius: 3px; }
     table.demo .preview { width: 45%; }
     table.demo .preview progress-bar { display: block; }
+    table.demo .preview code.override-value { display: block; margin-bottom: 6px; }
     table.demo .desc { color: #555; }
   </style>
 </head>
@@ -385,6 +386,15 @@
       render.className = "render";
       render.appendChild(bar);
       example.append(code, render);
+    });
+
+    // In each demo table, show the exact CSS override applied to the element,
+    // right above the rendered element in the result cell.
+    document.querySelectorAll("table.demo .preview progress-bar[style]").forEach(bar => {
+      const code = document.createElement("code");
+      code.className = "override-value";
+      code.textContent = bar.getAttribute("style");
+      bar.parentElement.insertBefore(code, bar);
     });
 
     const slider = document.getElementById("slider");
