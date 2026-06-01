@@ -80,7 +80,7 @@
     table.demo code { font-size: 12px; background: #eee; padding: 1px 4px; border-radius: 3px; }
     table.demo .preview { width: 45%; }
     table.demo .preview progress-bar { display: block; }
-    table.demo .preview code.override-value { display: block; margin-bottom: 6px; }
+    table.demo.variables .preview code.override-value { display: block; margin-bottom: 6px; }
     table.demo .desc { color: #555; }
   </style>
 </head>
@@ -272,7 +272,7 @@
       a plain CSS directive can't reach — the sealed shadow internals (the fill and the inner label).
       Host-level styling (background, border, radius) is done with standard CSS, shown in the table above.
       Each row overrides one variable to a dramatic value so the effect is visible.</p>
-    <table class="demo">
+    <table class="demo variables">
       <thead>
         <tr><th>Variable</th><th class="desc">Default &amp; effect</th><th class="preview">Override</th></tr>
       </thead>
@@ -311,7 +311,7 @@
     <p class="desc" style="font-size:13px">Custom properties specific to <code>mode="circular"</code>, plus the shared
       color and duration variables. <code>--track-color</code> only matters here — the linear track is just
       the host background.</p>
-    <table class="demo">
+    <table class="demo variables">
       <thead>
         <tr><th>Variable</th><th class="desc">Default &amp; effect</th><th class="preview">Override</th></tr>
       </thead>
@@ -388,9 +388,10 @@
       example.append(code, render);
     });
 
-    // In each demo table, show the exact CSS override applied to the element,
-    // right above the rendered element in the result cell.
-    document.querySelectorAll("table.demo .preview progress-bar[style]").forEach(bar => {
+    // In the variable tables, show the exact CSS override applied to the element,
+    // right above the rendered element in the result cell. (The External CSS
+    // tables already print the directive in their leftmost column.)
+    document.querySelectorAll("table.demo.variables .preview progress-bar[style]").forEach(bar => {
       const code = document.createElement("code");
       code.className = "override-value";
       code.textContent = bar.getAttribute("style");
