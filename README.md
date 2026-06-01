@@ -68,6 +68,7 @@ Custom properties are reserved for the sealed shadow internals that CSS can't ot
 progress-bar {
   --progress-color: rgb(57, 137, 39); /* fill color */
   --error-color: #7a242f;             /* fill color when the element has the [error] attribute */
+  --indeterminate-color: #999;        /* fill / arc color while indeterminate */
   --progress-duration: 120ms;         /* fill / dashoffset transition */
   --bar-height: 32px;                 /* minimum bar height (linear) */
   --bar-padding: 8px;                 /* padding around the label (linear) */

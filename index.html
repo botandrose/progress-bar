@@ -261,12 +261,12 @@
         </tr>
         <tr>
           <td><code>color: #1565c0</code></td>
-          <td class="desc">The label inherits the host color (<code>.label</code> uses <code>color: inherit</code>), so the centered text picks this up.</td>
+          <td class="desc">The host carries an inline style, so the label drops its <code>mix-blend-mode</code> default and switches to <code>color: inherit</code>, picking up this color.</td>
           <td class="preview"><progress-bar mode="circular" percent="60" style="color:#1565c0;">60%</progress-bar></td>
         </tr>
         <tr>
           <td><code>font-size: 20px</code></td>
-          <td class="desc">No effect on the label: <code>.label</code> sets its own <code>font-size: 13px</code> inside the shadow root.</td>
+          <td class="desc">Enlarges the label: <code>.label</code> no longer pins its own font-size, so the centered text inherits the host's <code>font-size</code>.</td>
           <td class="preview"><progress-bar mode="circular" percent="60" style="font-size:20px">60%</progress-bar></td>
         </tr>
       </tbody>
