@@ -5,6 +5,7 @@ const STYLES = `
   :host {
     --progress-color: #2E7D32;
     --error-color: #7a242f;
+    --indeterminate-color: #999;
     --track-color: #333333;
     --progress-duration: 120ms;
     --indeterminate-duration: 1.5s;
@@ -20,7 +21,6 @@ const STYLES = `
     min-height: var(--bar-height);
     padding: var(--bar-padding);
     font-size: 13px;
-    color: white;
     align-content: center;
     box-sizing: border-box;
     position: relative;
@@ -42,6 +42,7 @@ const STYLES = `
 
   /* Indeterminate (linear): no percent set — a fixed-width segment sweeping across the track. */
   :host(:not([percent])) .bar {
+    background: var(--indeterminate-color);
     width: 40%;
     animation: indeterminate-linear var(--indeterminate-duration) infinite linear;
   }
@@ -88,6 +89,10 @@ const STYLES = `
     transition: stroke-dashoffset var(--progress-duration) ease;
   }
 
+  :host([indeterminate]) .progress-ring {
+    stroke: var(--indeterminate-color);
+  }
+
   :host([error]) .progress-ring {
     stroke: var(--error-color);
   }
@@ -98,9 +103,11 @@ const STYLES = `
     display: flex;
     align-items: center;
     justify-content: center;
-    color: inherit;
-    font-size: 13px;
+    color: #fff;
+    mix-blend-mode: difference;
   }
+
+  :host([style]) .label{mix-blend-mode: initial; color: inherit;}
 
   /* Indeterminate (circular): no percent set — spin a fixed arc around the ring. */
   :host(:not([percent])) .ring {
@@ -120,7 +127,7 @@ const STYLES = `
 const LINEAR_HTML = `
   <span class="content">
     <div class="bar"></div>
-    <slot></slot>
+    <div class="text"><slot></slot></div>
   </span>
 `;
 

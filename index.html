@@ -80,6 +80,7 @@
     table.demo code { font-size: 12px; background: #eee; padding: 1px 4px; border-radius: 3px; }
     table.demo .preview { width: 45%; }
     table.demo .preview progress-bar { display: block; }
+    table.demo .preview progress-bar[mode="circular"] { display: inline-block; }
     table.demo .desc { color: #555; }
   </style>
 </head>
@@ -137,7 +138,17 @@
   </section>
 
   <section class="bg-light">
-    <h2>Indeterminate (unknown percent)</h2>
+    <h2>Indeterminate (unknown percent) on light page background</h2>
+    <div class="row"><progress-bar indeterminate><a class="download-link" href="#" download="working.xml">working.xml (linear, sweeping)</a></progress-bar></div>
+    <div class="row" style="margin-top:12px; gap:24px">
+      <progress-bar mode="circular" indeterminate></progress-bar>
+      <progress-bar mode="circular" percent="42">42%</progress-bar>
+      <progress-bar mode="circular" percent="80" error>80%</progress-bar>
+    </div>
+  </section>
+
+  <section class="bg-dark">
+    <h2 style="color:#ccc">Indeterminate (unknown percent) on dark page background</h2>
     <div class="row"><progress-bar indeterminate><a class="download-link" href="#" download="working.xml">working.xml (linear, sweeping)</a></progress-bar></div>
     <div class="row" style="margin-top:12px; gap:24px">
       <progress-bar mode="circular" indeterminate></progress-bar>
@@ -264,7 +275,7 @@
         <tr>
           <td><code>color: #1565c0</code></td>
           <td class="desc">The label inherits the host color (<code>.label</code> uses <code>color: inherit</code>), so the centered text picks this up.</td>
-          <td class="preview"><progress-bar mode="circular" percent="60" style="color:#1565c0">60%</progress-bar></td>
+          <td class="preview"><progress-bar mode="circular" percent="60" style="color:#1565c0;">60%</progress-bar></td>
         </tr>
         <tr>
           <td><code>font-size: 20px</code></td>
