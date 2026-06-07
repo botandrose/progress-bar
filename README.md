@@ -35,7 +35,7 @@ bar.percent = 75;
 ### Properties
 
 - `percent` (number | null) - The progress percentage. Numeric values are clamped to 0-100; a non-numeric value throws. When unset — no `percent` attribute, or `percent = null` — the bar is **indeterminate**: the fill animates as a sweeping segment (a spinning arc in circular mode) and `aria-valuenow` is dropped, the standard signal for an indeterminate progressbar. Set a number to make it determinate. Default: indeterminate. Can be set as attribute or property.
-- `error` (boolean) - Whether the bar is in an error state, which recolors the fill to `--error-color`. Reflected between the `error` property and the `error` attribute, so `<progress-bar error>` and `el.error = true` are equivalent. Default: false.
+- `error` (boolean) - Whether the bar is in an error state. In linear mode this recolors the fill to `--error-color`; in circular mode it drops the arc and renders a static full ring plus a centered X in `--error-color` — a "failed" glyph. Reflected between the `error` property and the `error` attribute, so `<progress-bar error>` and `el.error = true` are equivalent. Default: false.
 - `indeterminate` (boolean, read-only) - Whether the bar is indeterminate, i.e. whether `percent` is unset. There is no `indeterminate` attribute — drive it through `percent` (omit it, or set the property to `null`).
 - `mode` (string) - `"linear"` (default) renders the horizontal fill bar; `"circular"` renders an SVG ring whose arc tracks `percent`, with the slotted content centered. Both modes honor `error` and the indeterminate (no-percent) state.
 

@@ -178,6 +178,12 @@ describe('progress-bar', () => {
       expect(circular.shadowRoot.querySelector('.bar')).toBeFalsy();
     });
 
+    it('includes an error-mark X in the ring for the failed/error state', () => {
+      const mark = circular.shadowRoot.querySelector('path.error-mark');
+      expect(mark).toBeTruthy();
+      expect(mark.getAttribute('d')).toContain('L');
+    });
+
     it('sets a full stroke-dashoffset at 0 percent', () => {
       // pathLength is normalized to 100, so the offset is on a 0-100 scale.
       const ring = circular.shadowRoot.querySelector('.progress-ring');
