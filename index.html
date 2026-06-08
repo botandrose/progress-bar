@@ -146,6 +146,17 @@
     <div class="example"><progress-bar mode="circular"></progress-bar></div>
   </section>
 
+  <section class="bg-light">
+    <h2>Optimistic auto-advance (<code>rate</code>)</h2>
+    <p class="desc" style="font-size:13px"><code>rate</code> is a float — percent per second — and the bar
+      advances its own <code>percent</code> at 30Hz with no JS. It's <em>optimistic</em>: handy when you expect
+      steady progress but only get occasional real updates. On reaching 100 it clears its own <code>rate</code>;
+      indeterminate bars (no <code>percent</code>) ignore it. The bars below re-arm on a loop so the creep stays
+      visible.</p>
+    <div class="example"><progress-bar percent="0" rate="25"><a href="#">optimistic.xml (25%/s)</a></progress-bar></div>
+    <div class="example"><progress-bar mode="circular" percent="0" rate="25">…</progress-bar></div>
+  </section>
+
   <section>
     <h2>External CSS set on the &lt;progress-bar&gt; element</h2>
     <p class="desc" style="font-size:13px">Properties applied to the host from the outside.
@@ -370,6 +381,19 @@
 
   <script type="module">
     import "./index.js";
+
+    // Stash the rate-demo bars (and their authored rate) before anything below
+    // mutates them, then re-arm each once it fills, so the creep loops on-screen.
+    const ratedBars = [...document.querySelectorAll("progress-bar[rate]")]
+      .map(bar => ({ bar, rate: bar.rate }));
+    setInterval(() => {
+      for (const { bar, rate } of ratedBars) {
+        if (!bar.hasAttribute("rate")) {
+          bar.percent = 0;
+          bar.rate = rate;
+        }
+      }
+    }, 700);
 
     // For each standalone example, show its source HTML to the left of the live render.
     // role/aria-* are injected by the component at runtime, not authored — hide them.

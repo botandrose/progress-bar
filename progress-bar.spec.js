@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import ProgressBar from './index.js';
 
 describe('progress-bar', () => {
@@ -215,6 +216,99 @@ describe('progress-bar', () => {
       el.mode = 'circular';
       expect(el.getAttribute('mode')).toBe('circular');
       expect(el.mode).toBe('circular');
+    });
+  });
+
+  describe('rate', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('reflects the rate property to the attribute', () => {
+      element.rate = 2.5;
+      expect(element.getAttribute('rate')).toBe('2.5');
+      expect(element.rate).toBe(2.5);
+
+      element.rate = null;
+      expect(element.hasAttribute('rate')).toBe(false);
+      expect(element.rate).toBe(null);
+    });
+
+    it('throws on a non-numeric rate rather than silently ignoring it', () => {
+      expect(() => { element.rate = 'abc'; }).toThrow(TypeError);
+    });
+
+    it('advances percent at percent/second via a 30Hz ticker', () => {
+      element.percent = 0;
+      element.rate = 30; // 30%/s -> +1% per 30Hz tick
+      jest.advanceTimersByTime(1000);
+      expect(element.percent).toBeCloseTo(30, 5);
+    });
+
+    it('ignores rate while indeterminate', () => {
+      element.percent = null;
+      element.rate = 30;
+      jest.advanceTimersByTime(1000);
+      expect(element.percent).toBe(null);
+      expect(element.indeterminate).toBe(true);
+    });
+
+    it('begins advancing once an indeterminate-but-rated bar is given a percent', () => {
+      element.percent = null;
+      element.rate = 30;
+      jest.advanceTimersByTime(1000);
+      expect(element.percent).toBe(null);
+
+      element.percent = 10;
+      jest.advanceTimersByTime(1000);
+      expect(element.percent).toBeCloseTo(40, 5);
+    });
+
+    it('clamps at 100 and retires its own rate', () => {
+      element.percent = 95;
+      element.rate = 30;
+      jest.advanceTimersByTime(1000);
+      expect(element.percent).toBe(100);
+      expect(element.hasAttribute('rate')).toBe(false);
+    });
+
+    it('supports negative rates, draining the bar', () => {
+      element.percent = 50;
+      element.rate = -30;
+      jest.advanceTimersByTime(1000);
+      expect(element.percent).toBeCloseTo(20, 5);
+      expect(element.hasAttribute('rate')).toBe(true);
+    });
+
+    it('retires a negative rate once it bottoms out at 0', () => {
+      element.percent = 5;
+      element.rate = -30;
+      jest.advanceTimersByTime(1000);
+      expect(element.percent).toBe(0);
+      expect(element.hasAttribute('rate')).toBe(false);
+    });
+
+    it('halts when the rate is cleared', () => {
+      element.percent = 0;
+      element.rate = 30;
+      jest.advanceTimersByTime(1000);
+      element.rate = null;
+      jest.advanceTimersByTime(1000);
+      expect(element.percent).toBeCloseTo(30, 5);
+    });
+
+    it('stops ticking on disconnect', () => {
+      const el = new ProgressBar();
+      el.setAttribute('percent', '0');
+      document.body.appendChild(el);
+      el.rate = 30;
+      document.body.removeChild(el);
+      jest.advanceTimersByTime(1000);
+      expect(el.percent).toBeCloseTo(0, 5);
     });
   });
 });

@@ -36,12 +36,14 @@ bar.percent = 75;
 
 - `percent` (number | null) - The progress percentage. Numeric values are clamped to 0-100; a non-numeric value throws. When unset — no `percent` attribute, or `percent = null` — the bar is **indeterminate**: the fill animates as a sweeping segment (a spinning arc in circular mode) and `aria-valuenow` is dropped, the standard signal for an indeterminate progressbar. Set a number to make it determinate. Default: indeterminate. Can be set as attribute or property.
 - `error` (boolean) - Whether the bar is in an error state. In linear mode this recolors the fill to `--error-color`; in circular mode it drops the arc and renders a static full ring plus a centered X in `--error-color` — a "failed" glyph. Reflected between the `error` property and the `error` attribute, so `<progress-bar error>` and `el.error = true` are equivalent. Default: false.
+- `rate` (number | null) - Optimistic auto-advance, in **percent per second**. When set on a determinate bar, the component creeps `percent` forward on its own at 30Hz (so `rate = 30` adds ~1% every tick) — useful when you expect steady progress but only receive occasional real updates. Negative rates drain the bar. On reaching the bound it's heading toward (100, or 0 for a negative rate) it clears its own `rate`; a later `percent` change re-arms it. An **indeterminate** bar (no `percent`) ignores `rate` entirely. Non-numeric values throw. Reflected between property and `rate` attribute. Default: unset (no auto-advance).
 - `indeterminate` (boolean, read-only) - Whether the bar is indeterminate, i.e. whether `percent` is unset. There is no `indeterminate` attribute — drive it through `percent` (omit it, or set the property to `null`).
 - `mode` (string) - `"linear"` (default) renders the horizontal fill bar; `"circular"` renders an SVG ring whose arc tracks `percent`, with the slotted content centered. Both modes honor `error` and the indeterminate (no-percent) state.
 
 ```html
 <progress-bar>working…</progress-bar>              <!-- indeterminate: no percent -->
 <progress-bar percent="50">file.pdf</progress-bar>
+<progress-bar percent="0" rate="20">file.pdf</progress-bar>  <!-- creeps forward at 20%/s -->
 <progress-bar mode="circular" percent="42">42%</progress-bar>
 <progress-bar mode="circular"></progress-bar>      <!-- indeterminate -->
 ```
