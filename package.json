@@ -1,6 +1,6 @@
 {
   "name": "@botandrose/progress-bar",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "A linnear and circular progress bar web component",
   "type": "module",
   "main": "index.js",
