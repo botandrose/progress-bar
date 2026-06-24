@@ -70,20 +70,34 @@ describe('progress-bar', () => {
     expect(newElement.percent).toBe(null);
     expect(newElement.indeterminate).toBe(true);
     expect(newElement.shadowRoot.querySelector('.bar').style.width).toBe('');
-    expect(newElement.hasAttribute('aria-valuenow')).toBe(false);
+    expect(newElement.shadowRoot.querySelector('.bar').hasAttribute('aria-valuenow')).toBe(false);
     document.body.removeChild(newElement);
   });
 
-  it('exposes progressbar ARIA semantics', () => {
-    expect(element.getAttribute('role')).toBe('progressbar');
-    expect(element.getAttribute('aria-valuemin')).toBe('0');
-    expect(element.getAttribute('aria-valuemax')).toBe('100');
-    expect(element.getAttribute('aria-valuenow')).toBe('33');
+  it('exposes progressbar ARIA semantics on the fill, not the host', () => {
+    const bar = element.shadowRoot.querySelector('.bar');
+    expect(bar.getAttribute('role')).toBe('progressbar');
+    expect(bar.getAttribute('aria-valuemin')).toBe('0');
+    expect(bar.getAttribute('aria-valuemax')).toBe('100');
+    expect(bar.getAttribute('aria-valuenow')).toBe('33');
+    // The host must not carry the role, or slotted interactive content (e.g. a
+    // download link) would be nested inside a progressbar.
+    expect(element.hasAttribute('role')).toBe(false);
+  });
+
+  // jsdom can't compute an accessible name through a slot, so this guards the
+  // structural invariant: the progressbar points at the label element that
+  // wraps the slotted content. The resolved name is verified in a browser.
+  it('names the progressbar from its slotted content via aria-labelledby', () => {
+    const bar = element.shadowRoot.querySelector('.bar');
+    const label = element.shadowRoot.getElementById(bar.getAttribute('aria-labelledby'));
+    expect(label).toBeTruthy();
+    expect(label.querySelector('slot')).toBeTruthy();
   });
 
   it('updates aria-valuenow alongside the bar width', () => {
     element.percent = 80;
-    expect(element.getAttribute('aria-valuenow')).toBe('80');
+    expect(element.shadowRoot.querySelector('.bar').getAttribute('aria-valuenow')).toBe('80');
   });
 
   it('clamps percent to the 0-100 range', () => {
@@ -134,7 +148,7 @@ describe('progress-bar', () => {
   describe('indeterminate state', () => {
     it('is determinate with a live aria-valuenow once percent is set', () => {
       expect(element.indeterminate).toBe(false);
-      expect(element.getAttribute('aria-valuenow')).toBe('33');
+      expect(element.shadowRoot.querySelector('.bar').getAttribute('aria-valuenow')).toBe('33');
     });
 
     it('becomes indeterminate when percent is set to null', () => {
@@ -146,7 +160,7 @@ describe('progress-bar', () => {
 
     it('drops aria-valuenow and inline width while indeterminate', () => {
       element.percent = null;
-      expect(element.hasAttribute('aria-valuenow')).toBe(false);
+      expect(element.shadowRoot.querySelector('.bar').hasAttribute('aria-valuenow')).toBe(false);
       expect(element.shadowRoot.querySelector('.bar').style.width).toBe('');
     });
 
@@ -154,7 +168,7 @@ describe('progress-bar', () => {
       element.percent = null;
       element.percent = 33;
       expect(element.indeterminate).toBe(false);
-      expect(element.getAttribute('aria-valuenow')).toBe('33');
+      expect(element.shadowRoot.querySelector('.bar').getAttribute('aria-valuenow')).toBe('33');
       expect(element.shadowRoot.querySelector('.bar').style.width).toBe('33%');
     });
   });
@@ -197,10 +211,12 @@ describe('progress-bar', () => {
       expect(Number(ring.style.strokeDashoffset)).toBe(50);
     });
 
-    it('still keeps progressbar ARIA semantics', () => {
+    it('still keeps progressbar ARIA semantics on the ring', () => {
       circular.percent = 50;
-      expect(circular.getAttribute('role')).toBe('progressbar');
-      expect(circular.getAttribute('aria-valuenow')).toBe('50');
+      const ring = circular.shadowRoot.querySelector('.ring');
+      expect(ring.getAttribute('role')).toBe('progressbar');
+      expect(ring.getAttribute('aria-valuenow')).toBe('50');
+      expect(circular.hasAttribute('role')).toBe(false);
     });
 
     it('clears the inline stroke-dashoffset when percent is unset', () => {
@@ -208,7 +224,7 @@ describe('progress-bar', () => {
       circular.percent = null;
       const ring = circular.shadowRoot.querySelector('.progress-ring');
       expect(ring.style.strokeDashoffset).toBe('');
-      expect(circular.hasAttribute('aria-valuenow')).toBe(false);
+      expect(circular.shadowRoot.querySelector('.ring').hasAttribute('aria-valuenow')).toBe(false);
     });
 
     it('reflects the mode property to the attribute', () => {

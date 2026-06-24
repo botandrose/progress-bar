@@ -148,7 +148,7 @@ const STYLES = `
 
 const LINEAR_HTML = `
   <div class="bar"></div>
-  <div class="text"><slot></slot></div>
+  <div class="text" id="label"><slot></slot></div>
 `;
 
 const CIRCULAR_HTML = `
@@ -158,7 +158,7 @@ const CIRCULAR_HTML = `
       <circle class="progress-ring" cx="50" cy="50" r="${CIRCLE_RADIUS}" pathLength="${PATH_LENGTH}"></circle>
       <path class="error-mark" d="M37 37 L63 63 M63 37 L37 63"></path>
     </svg>
-    <span class="label"><slot></slot></span>
+    <span class="label" id="label"><slot></slot></span>
   </div>
 `;
 
@@ -198,15 +198,20 @@ class ProgressBar extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.setAttribute('role', 'progressbar');
-    this.setAttribute('aria-valuemin', '0');
-    this.setAttribute('aria-valuemax', '100');
     this.updateBar();
     this._syncTicker();
   }
 
   disconnectedCallback() {
     this._stopTicker();
+  }
+
+  // The progressbar role lives on the progress visual (the linear fill or the
+  // circular ring), never on the host, so the host's slotted content — which
+  // may be interactive, e.g. a download link — is never nested inside a
+  // progressbar.
+  get _progressbarEl() {
+    return this.shadowRoot.querySelector(this.mode === 'circular' ? '.ring' : '.bar');
   }
 
   get percent() {
@@ -290,10 +295,13 @@ class ProgressBar extends HTMLElement {
       }
     }
 
-    if (this.indeterminate) {
-      this.removeAttribute('aria-valuenow');
-    } else {
-      this.setAttribute('aria-valuenow', String(this._percent));
+    const progressbar = this._progressbarEl;
+    if (progressbar) {
+      if (this.indeterminate) {
+        progressbar.removeAttribute('aria-valuenow');
+      } else {
+        progressbar.setAttribute('aria-valuenow', String(this._percent));
+      }
     }
   }
 
@@ -337,6 +345,14 @@ class ProgressBar extends HTMLElement {
     this._renderedMode = mode;
     this.shadowRoot.adoptedStyleSheets = [getStyleSheet()];
     this.shadowRoot.innerHTML = mode === 'circular' ? CIRCULAR_HTML : LINEAR_HTML;
+    // Name the progressbar from its slotted content via the label element; the
+    // platform computes the name live, so late/changing content is reflected
+    // without any copying.
+    const bar = this._progressbarEl;
+    bar.setAttribute('role', 'progressbar');
+    bar.setAttribute('aria-valuemin', '0');
+    bar.setAttribute('aria-valuemax', '100');
+    bar.setAttribute('aria-labelledby', 'label');
   }
 }
 
